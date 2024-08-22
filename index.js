@@ -1,8 +1,6 @@
-// Import statements using ES module syntax
 import express from 'express';
 import { connectDB } from './config/db.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { Static_Mates_Router } from './routes/static_mates.route.js';
 
 // Initialize express app
 const app = express();
@@ -11,25 +9,32 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Connect to the database
-connectDB().then(() => {
-    console.log("Database connected");
+// Ensure the database is connected before loading routes and models
+const startServer = async () => {
+    try {
+        // Wait for the database connection
+        await connectDB();
 
-    // Routes are initialized AFTER the database is connected
-    app.use('/static_mates', Static_Mates_Router);
+        // After the DB is connected, import models and routes
+        const { Static_Mates_Router } = await import('./routes/static_mates.route.js');
 
-    // Start the server
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+        // Use routes
+        app.use('/static_mates', Static_Mates_Router);
 
-    // Error handling middleware should be placed after routes
-    app.use(errorHandler);
-}).catch(err => {
-    console.error("Database connection failed:", err);
-    process.exit(1); // Exit on failure
-});
+        // Start the server after everything is ready
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
 
-// Export app for testing or other purposes
+        // Error handling middleware
+        app.use(errorHandler);
+    } catch (error) {
+        console.error("Error starting server:", error);
+    }
+};
+
+// Start the server only after DB connection is established
+startServer();
+
 export { app };
