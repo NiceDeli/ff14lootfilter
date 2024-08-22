@@ -2,7 +2,7 @@ import express from 'express';
 import { Product } from '../models/product.model.js';
 import { getProducts, getProduct, createProduct, updateProduct, deleteProduct } from '../controller/product.controller.js';
 
-export const productRouter = express.Router();
+export const productRouter = express.Router(); 
 
 
 //GET METHODS:
