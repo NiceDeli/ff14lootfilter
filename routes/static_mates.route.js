@@ -4,6 +4,9 @@ import { getMany_Static_Mates, getSingle_Static_Mate, createStatic_Mate, updateS
 
 export const Static_Mates_Router = express.Router();
 
+//So in the previous code I defined "static_mates" like this
+
+//
 
 //GET METHODS:
 Static_Mates_Router.get('/', getMany_Static_Mates);

@@ -6,14 +6,22 @@ export const Kill_History_Router = express.Router();
 
 
 //GET METHODS:
-Kill_History_Router .get('/',  getAll_Kill_History);
-Kill_History_Router .get("/:id",  getAll_Kill_History);
+//Main endpoint is: /killHistoryRoutes
+
+//What is the full url to grab all the kill history
+// /killHistoryRoutes/
+
+// http://localhost:3000/killHistoryRoutes/ | METHOD: GET
+
+
+Kill_History_Router.get('/',  getAll_Kill_History);
+Kill_History_Router.get("/:id",  getAll_Kill_History);
 
 //POST METHODS:
-Kill_History_Router .post("/", createKill);
+Kill_History_Router.post("/", createKill);
 
 //PUT METHODS:
-Kill_History_Router .put("/:id", updateKill);
+Kill_History_Router.put("/:id", updateKill);
 
 //Delete METHODS:
-Kill_History_Router .delete("/:id", deleteKill);
+Kill_History_Router.delete("/:id", deleteKill);
