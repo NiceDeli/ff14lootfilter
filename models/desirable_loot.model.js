@@ -13,7 +13,7 @@ const Desirable_Loot_Schema = new mongoose.Schema({
         default: ""
     },
     floor_count: {
-        type: String,
+        type: Number,
         required: [true, "What floor is said piece/upgrade mat on"],
         default: ""
     },

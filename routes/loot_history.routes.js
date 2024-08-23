@@ -6,14 +6,14 @@ export const Loot_History_Router = express.Router();
 
 
 //GET METHODS:
-Loot_History_Router .get('/',  getAll_Loot_History);
-Loot_History_Router .get("/:id",  getAll_Loot_History);
+Loot_History_Router.get('/',  getAll_Loot_History);
+Loot_History_Router.get("/:id",  getAll_Loot_History);
 
 //POST METHODS:
-Loot_History_Router .post("/", createLoot);
+Loot_History_Router.post("/", createLoot);
 
 //PUT METHODS:
-Loot_History_Router .put("/:id", updateLoot);
+Loot_History_Router.put("/:id", updateLoot);
 
 //Delete METHODS:
-Loot_History_Router .delete("/:id", deleteLoot);
+Loot_History_Router.delete("/:id", deleteLoot);
