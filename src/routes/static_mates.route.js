@@ -1,5 +1,6 @@
 import express from 'express';
 //import { getMany_Static_Mates, getSingle_Static_Mate, createStatic_Mate, updateStatic_Mate, deleteStatic_Mate } from '../controller/static_mates.controller.js';
+import {findAllStaticMates} from '../controller/static_mates.controller.js'
 
 export const Static_Mates_Router = express.Router();
 
@@ -8,7 +9,7 @@ export const Static_Mates_Router = express.Router();
 //
 
 // //GET METHODS:
-// Static_Mates_Router.get('/', getMany_Static_Mates);
+Static_Mates_Router.get('/', findAllStaticMates);
 // Static_Mates_Router.get("/:id", getSingle_Static_Mate);
 
 // //POST METHODS:

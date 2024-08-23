@@ -1,16 +1,16 @@
-// import { Static_Mates } from '../src/models/static_mates.model.js';
+import { StaticMate } from '../models/static_mates.model.js'
 
 
 // /////Read or Pull
-// export const getMany_Static_Mates = async (req, res) => {
-//     try {
-//         console.log("HI I'M IN GET MANY STATIC MATES")
-//         const many_static_mates = await Static_Mates.find({});
-//         res.status(200).json(many_static_mates);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// }
+export const findAllStaticMates = async (req, res) => {
+    try {
+        console.log("Calling find all for Static Mates")
+        const allStaticMates = await StaticMate.findAll();
+        res.status(200).json({message: allStaticMates})
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
 // ///create
 // export const getSingle_Static_Mate = async (res, req) => {
