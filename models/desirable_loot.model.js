@@ -19,6 +19,7 @@ const Desirable_Loot_Schema = new mongoose.Schema({
     },
 });
 
+
 // Ensure AutoIncrement is initialized before using it
 if (AutoIncrement) {
     Desirable_Loot_Schema.plugin(AutoIncrement, { inc_field: 'id' });
@@ -26,7 +27,7 @@ if (AutoIncrement) {
     console.error("AutoIncrement plugin is not initialized");
 }
 
-// Apply AutoIncrement plugin
-//Desirable_Loot_Schema.plugin(AutoIncrement, { inc_field: 'id' });
+//Apply AutoIncrement plugin
+Desirable_Loot_Schema.plugin(AutoIncrement, { inc_field: 'id' });
 
 export const Desirable_Loot = mongoose.model("Desirable_Loot", Desirable_Loot_Schema);

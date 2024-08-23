@@ -16,9 +16,11 @@ const startServer = async () => {
         await connectDB();
 
         // After the DB is connected, import models and routes
-        const { Static_Mates_Router } = await import('./routes/static_mates.route.js');
+        const { Static_Mates_Router } = await import('./routes/static_mates.routes.js');
         const { Kill_History_Router } = await import('./routes/kill_history.routes.js');
         const { Desirable_Loot_Router } = await import('./routes/desirable_loot.routes.js');
+        const {Loot_History_Router} = await import ('./routes/loot_history.routes.js'); 
+        const {Loot_Table_Router} = await import ('./routes/loot_table.routes.js')
 
         // Use routes
         //right now our localhost:3000
@@ -27,8 +29,10 @@ const startServer = async () => {
         //2. The actual logic after the endpoint (it defines the routes after /static_mates basically)
 
         app.use('/static_mates', Static_Mates_Router);
-        app.use('/killHistoryRoutes', Kill_History_Router);
-        //app.use('/desirable_loot_router', Desirable_Loot_Router);
+        app.use('/killHistory', Kill_History_Router);
+        app.use('/desirable_loot', Desirable_Loot_Router);
+        app.use('/loot_history', Loot_History_Router);
+        app.use('loot_table', Loot_Table_Router);
 
         // Start the server after everything is ready
         const PORT = process.env.PORT || 5000;
