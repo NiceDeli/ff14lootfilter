@@ -12,7 +12,7 @@ export const getAll_Desirable_Loot= async (req, res) => {
 }
 
 ///create
-export const getSingle_Desirable_Loot= async (res, req) => {
+export const getSingle_Desirable_Loot = async (req, res) => {
     try {
         const { id } = req.params;
         const single_desirable_loot = await Desirable_Loot.findById(id);
@@ -20,7 +20,8 @@ export const getSingle_Desirable_Loot= async (res, req) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+
 export const create_Desirable_Loot = async (req, res) => {
     try {
         const single_desirable_loot = await Desirable_Loot.create(req.body);

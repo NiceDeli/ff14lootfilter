@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { AutoIncrement } from '../config/db.js';
 
 const Loot_Table_Schema = new mongoose.Schema(
     {
@@ -22,6 +23,14 @@ const Loot_Table_Schema = new mongoose.Schema(
         },
     },
 );
+
+console.log("Loot table model initialized")
+// Ensure AutoIncrement is initialized before using it
+if (AutoIncrement) {
+    Loot_Table_Schema.plugin(AutoIncrement, { inc_field: 'loot_table_id' });
+} else {
+    console.error("AutoIncrement plugin is not initialized");
+}
 
 export const Loot_Table = mongoose.model("Loot Table", Loot_Table_Schema );
 

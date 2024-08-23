@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { AutoIncrement } from '../config/db.js';
 //im actually not 100% sure on the logic here...
 const Loot_History_Schema = new mongoose.Schema(
     {
@@ -24,6 +25,15 @@ const Loot_History_Schema = new mongoose.Schema(
         
     },
 );
+
+console.log("Loot history model initialized")
+// Ensure AutoIncrement is initialized before using it
+if (AutoIncrement) {
+    Loot_History_Schema.plugin(AutoIncrement, { inc_field: 'loot_history_id' });
+} else {
+    console.error("AutoIncrement plugin is not initialized");
+}
+
 
 export const Loot_History = mongoose.model("Loot_History", Loot_History_Schema);
 
