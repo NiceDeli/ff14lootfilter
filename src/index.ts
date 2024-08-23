@@ -1,9 +1,8 @@
-import express from 'express';
+import express, {application} from 'express';
 import { connectDB } from './config/db.js';
-import { errorHandler } from './middleware/errorHandler.js';
 
-// Initialize express app
-const app = express();
+// Initialize express app with the correct type
+const app: application = express();
 
 // Middleware for parsing JSON and URL encoded data
 app.use(express.json());
@@ -21,8 +20,6 @@ const startServer = async () => {
             console.log(`Server running on port ${PORT}`);
         });
 
-        // Error handling middleware
-        app.use(errorHandler);
     } catch (error) {
         console.error("Error starting server:", error);
     }
