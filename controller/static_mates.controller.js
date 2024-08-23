@@ -13,7 +13,7 @@ export const getMany_Static_Mates = async (req, res) => {
 }
 
 ///create
-export const getSingle_Static_Mate = async (res, req) => {
+export const getSingle_Static_Mate = async (req, res) => {
     try {
         const { id } = req.params;
         const single_static_mate = await Static_Mates.findById(id);
@@ -21,7 +21,8 @@ export const getSingle_Static_Mate = async (res, req) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}
+};
+
 export const createStatic_Mate = async (req, res) => {
     try {
         const single_static_mate = await Static_Mates.create(req.body);

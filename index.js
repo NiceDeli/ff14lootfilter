@@ -28,7 +28,7 @@ const startServer = async () => {
 
         app.use('/static_mates', Static_Mates_Router);
         app.use('/killHistoryRoutes', Kill_History_Router);
-        //app.use('/desirable_loot_router', Desirable_Loot_Router);
+        app.use('/desirable_loot_router', Desirable_Loot_Router);
 
         // Start the server after everything is ready
         const PORT = process.env.PORT || 5000;

@@ -2,6 +2,9 @@ import mongoose from 'mongoose';
 import { AutoIncrement } from '../config/db.js';
 
 const Static_Mates_Schema = new mongoose.Schema({
+    static_mates_id: {
+        type: Number
+    },
     name: {
         type: String,
         required: [true, "Please enter static member"],
@@ -17,10 +20,10 @@ const Static_Mates_Schema = new mongoose.Schema({
         required: false
     },
 });
-
+console.log("Static Mates model initialized")
 // Ensure AutoIncrement is initialized before using it
 if (AutoIncrement) {
-    Static_Mates_Schema.plugin(AutoIncrement, { inc_field: 'id' });
+    Static_Mates_Schema.plugin(AutoIncrement, { inc_field: 'static_mates_id' });
 } else {
     console.error("AutoIncrement plugin is not initialized");
 }

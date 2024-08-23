@@ -9,8 +9,12 @@ let AutoIncrement;
 export const connectDB = async () => {
     try {
         const connection = await mongoose.connect(process.env.MONGO_URI);
-        // @ts-ignore
-        AutoIncrement = AutoIncrementFactory(connection)
+  
+        // Initialize AutoIncrement only once and export it
+        if (!AutoIncrement) {
+            // @ts-ignore
+            AutoIncrement = AutoIncrementFactory(connection);
+        }
         console.log("Connected to database");
     } catch (error) {
         console.error("Database connection failed:", error);
