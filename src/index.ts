@@ -1,5 +1,6 @@
 import express, {application} from 'express';
 import { connectDB } from './config/db.js';
+import {Static_Mates_Router} from "./routes/static_mates.route.js"
 
 // Initialize express app with the correct type
 const app: application = express();
@@ -19,6 +20,8 @@ const startServer = async () => {
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
+
+        app.use('/static_mates', Static_Mates_Router) 
 
     } catch (error) {
         console.error("Error starting server:", error);

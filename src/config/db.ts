@@ -8,7 +8,7 @@ dotenv.config(); // Load environment variables from .env
 const sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
   dialect: 'postgres',
   logging: false, // Optional: disable logging of SQL queries
-  dialectOptions: {
+  dialectOptions: { 
     ssl: {
       require: true, // Ensure SSL is required
       rejectUnauthorized: false, // Skip SSL certificate validation (adjust based on security needs)
