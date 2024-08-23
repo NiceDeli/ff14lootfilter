@@ -4,6 +4,7 @@ import { Static_Mates } from '../models/static_mates.model.js';
 /////Read or Pull
 export const getMany_Static_Mates = async (req, res) => {
     try {
+        console.log("HI I'M IN GET MANY STATIC MATES")
         const many_static_mates = await Static_Mates.find({});
         res.status(200).json(many_static_mates);
     } catch (error) {
