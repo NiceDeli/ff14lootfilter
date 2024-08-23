@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { AutoIncrement } from '../config/db';
+import { AutoIncrement } from '../config/db.js';
 
 const Desirable_Loot_Schema = new mongoose.Schema({
     piece: {
@@ -19,8 +19,14 @@ const Desirable_Loot_Schema = new mongoose.Schema({
     },
 });
 
+// Ensure AutoIncrement is initialized before using it
+if (AutoIncrement) {
+    Desirable_Loot_Schema.plugin(AutoIncrement, { inc_field: 'id' });
+} else {
+    console.error("AutoIncrement plugin is not initialized");
+}
 
 // Apply AutoIncrement plugin
-Desirable_Loot_Schema.plugin(AutoIncrement, { inc_field: 'id' });
+//Desirable_Loot_Schema.plugin(AutoIncrement, { inc_field: 'id' });
 
 export const Desirable_Loot = mongoose.model("Desirable_Loot", Desirable_Loot_Schema);
