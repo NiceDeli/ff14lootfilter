@@ -5,7 +5,9 @@ import { StaticMate } from '../models/static_mates.model.js'
 export const findAllStaticMates = async (req, res) => {
     try {
         console.log("Calling find all for Static Mates")
-        const allStaticMates = await StaticMate.findAll();
+
+        const allStaticMates:StaticMate[] = await StaticMate.findAll();
+
         res.status(200).json({message: allStaticMates})
     } catch (error) {
         res.status(500).json({ message: error.message });
