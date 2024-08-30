@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     
-    await queryInterface.createTable('current_loot', {
+    await queryInterface.createTable('desirable_loot', {
         id: {
           type: Sequelize.INTEGER,
           autoIncrement: true,
@@ -31,11 +31,15 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: false,
         },
+        date_obtained: {
+          type: Sequelize.DATE,
+          allowNull: false
+        }
       })
-      await queryInterface.addConstraint('current_loot', {
-        fields: ['static_mate_id'],
-        type: 'foreign key',
-        name: 'static_member',
+      await queryInterface.addConstraint('desirable_loot', { //desirable_loot is the table we are looking at (aka this one)
+        fields: ['static_mate_id'], //name of the json/class made above i want to be a foreign key
+        type: 'foreign key', //making it a foreign key lol
+        name: 'static_member', //optional name attached
         references:{
           table: 'static_mates', //this is refferencing the previous table  
           field: "id" //this is refferencing the previous table
@@ -43,7 +47,7 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
-      await queryInterface.addConstraint('current_loot', {
+      await queryInterface.addConstraint('desirable_loot', {
         fields: ['loot_table_id'],
         type: 'foreign key',
         name: 'loot_table',
@@ -57,9 +61,6 @@ module.exports = {
       ;
     },
       async down (queryInterface, Sequelize) {
-        await queryInterface.dropTable('current_loot');
+        await queryInterface.dropTable('desirable_loot');
         }
   };
-
-//the columns i made were the wrong type for the keys, the only way we could fix thing either modify or delete the table, 
-//
