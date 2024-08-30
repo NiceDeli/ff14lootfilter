@@ -2,11 +2,13 @@
   "name": "crud-testing",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "node index.js",
-    "dev": "nodemon index.js"
+    "serve": "node ./dist/index.js",
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node './dist/index.js'"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +19,18 @@
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.3",
     "mongoose-sequence": "^6.0.1",
-    "nodemon": "^3.1.4"
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.3",
+    "sequelize-typescript": "^2.1.6"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "nodemon": "^3.1.4",
+    "sequelize-cli": "^6.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4",
+    "typescript-transform-paths": "^3.5.0"
+  }
 }
