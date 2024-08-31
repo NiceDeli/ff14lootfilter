@@ -33,6 +33,7 @@ module.exports = {
         allowNull: true,
       },
       floor: {
+        //will be renamed to floor number later
         type: Sequelize.INTEGER,
         allowNull: false
       }

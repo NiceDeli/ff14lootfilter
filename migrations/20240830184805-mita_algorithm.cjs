@@ -64,17 +64,8 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       });
-      await queryInterface.addConstraint('mita_algorithm', {
-        fields: ['floor_id'],
-        type: 'foreign key',
-        name: 'floor_from_kill_history',
-        references:{
-          table: 'kill_history',
-          field: "floor"
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE'
-      });
+
+
       ;
     },
       async down (queryInterface, Sequelize) {
