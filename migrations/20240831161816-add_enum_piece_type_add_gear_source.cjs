@@ -41,5 +41,6 @@ module.exports = {
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_loot_table_piece_type";');
 
     await queryInterface.removeColumn('loot_table', 'gear_source');
+    await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_loot_table_gear_source";');
   }
 };
