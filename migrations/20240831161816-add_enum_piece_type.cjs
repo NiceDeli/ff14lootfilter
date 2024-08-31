@@ -17,6 +17,7 @@ module.exports = {
         'necklace',
         'offhand', // shields for instance
         'ring',
+        'tome',
         'weapon',
         'weapon_upgrade'
       ),      
