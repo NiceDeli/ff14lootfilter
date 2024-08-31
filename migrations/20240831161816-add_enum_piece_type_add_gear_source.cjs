@@ -23,6 +23,12 @@ module.exports = {
       ),      
       allowNull: false,
     });
+
+    await queryInterface.addColumn('loot_table', 'gear_source', {
+      type: Sequelize.ENUM('Raid', 'Crafted', 'Tome', 'Other'), // Define the ENUM values
+      allowNull: false, // Set to true if you want to allow nulls, or false if every item must have a source
+      defaultValue: 'Other', // Default value to prevent issues with existing rows
+    });
   },
 
   async down (queryInterface, Sequelize) {
@@ -33,5 +39,7 @@ module.exports = {
 
     // Optional: Drop the ENUM type if necessary
     await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_loot_table_piece_type";');
+
+    await queryInterface.removeColumn('loot_table', 'gear_source');
   }
 };
