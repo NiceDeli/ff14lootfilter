@@ -29,8 +29,8 @@ export const findSingleStaticMate = async (req, res) => {
 export const createSingleStaticMate = async (req, res) => {
     try {
         //properties on the query object and the query object is property on the request object 
-        const { static_name, raid_member_role } = req.query;
-        //console.log("req.params", req.query)
+        const { static_name, raid_member_role } = req.body;
+        //console.log("req.body", req.body)
         //find a single pesron
         const sM = await StaticMate.findOne({ where: {name: static_name} });
         if (sM){

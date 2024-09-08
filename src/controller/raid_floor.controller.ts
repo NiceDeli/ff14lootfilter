@@ -29,8 +29,8 @@ export const findAllFloor = async (req, res) => {
 export const createSingleFloor = async (req, res) => {
     try {
         //properties on the query object and the query object is property on the request object 
-        const { floor_acronym, floor_full_name } = req.query;
-        console.log("req.params", req.query)
+        const { floor_acronym, floor_full_name } = req.body;
+        console.log("req.body", req.body)
         //find a single pesron
         const findSingleFloor = await Floor.findOne({ where: {floor_abbreviation: floor_acronym} });
         if (findSingleFloor){

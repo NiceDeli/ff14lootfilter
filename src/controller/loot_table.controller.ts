@@ -29,8 +29,8 @@ export const findAllLootTable = async (req, res) => {
 export const createSingleLootTable = async (req, res) => {
     try {
         //properties on the query object and the query object is property on the request object 
-        const { gear_piece, gear_name, floor_level, source_of_gear, itemLvl } = req.query;
-        console.log("req.params", req.query)
+        const { gear_piece, gear_name, floor_level, source_of_gear, itemLvl } = req.body;
+        console.log("req.body", req.body)
         //find a single pesron
         const findSingleLootTable = await LootTable.findOne({ where: {name_of_gear: gear_name} });
         if (findSingleLootTable){

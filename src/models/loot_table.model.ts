@@ -24,7 +24,7 @@ export class LootTable extends Model<LootTable> {
 
     @AllowNull(false)
     @Column(DataType.ENUM('accessory_upgrade', 'armor_upgrade', 'bracelet', 'chest', 
-     'earrings', 'feet', 'gloves', 'head', 'legs', 'necklace', 'offhand'))
+     'earrings', 'feet', 'gloves', 'head', 'legs', 'necklace', 'ring', 'offhand'))
     piece_type: string;
 
     @AllowNull(false)
