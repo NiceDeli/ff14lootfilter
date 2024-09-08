@@ -1,5 +1,6 @@
 import { UpdatedAt } from 'sequelize-typescript';
 import { LootTable } from '../models/loot_table.model.js'
+import { createPayload } from './types/loot_table_types.js';
 
 
 ///////Read or Pull all
@@ -29,21 +30,21 @@ export const findAllLootTable = async (req, res) => {
 export const createSingleLootTable = async (req, res) => {
     try {
         //properties on the query object and the query object is property on the request object 
-        const { gear_piece, gear_name, floor_level, source_of_gear, itemLvl } = req.body;
+        const createPayload:createPayload = req.body;
         console.log("req.body", req.body)
         //find a single pesron
-        const findSingleLootTable = await LootTable.findOne({ where: {name_of_gear: gear_name} });
+        const findSingleLootTable = await LootTable.findOne({ where: {name_of_gear: createPayload.name_of_gear } });
         if (findSingleLootTable){
             throw Error("There was already loot piece with that name")
             return
         }
         //this is the set up of paramaters for postman
         const single_loot_piece = await LootTable.create({
-                piece_type: gear_piece,
-                name_of_gear: gear_name,
-                floor_id: floor_level,
-                gear_source: source_of_gear,
-                iLvl: itemLvl,
+                piece_type: createPayload.piece_type,
+                name_of_gear: createPayload.name_of_gear,
+                floor_id: createPayload.floor_id,
+                gear_source: createPayload.gear_source,
+                iLvl: createPayload.iLvl,
                 createdAt: new Date(),
                 updatedAt: new Date(),
         })
@@ -54,7 +55,7 @@ export const createSingleLootTable = async (req, res) => {
         else {
             throw Error("something went wrong")
         }
-        res.status(200).json({message: "loot piece was created"});
+        res.status(200).json({message: "Success", data: single_loot_piece});
     }
     catch (error){
         console.log("we had an error: ", error)

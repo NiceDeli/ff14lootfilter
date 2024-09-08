@@ -38,7 +38,7 @@ export class LootTable extends Model<LootTable> {
 
     @AllowNull(false)
     @Column(DataType.STRING) 
-    floor_id: string;
+    floor_id: number;
 
     @AllowNull(false)
     @Column(DataType.ENUM('Raid', 'Crafted', 'Tome', 'Other'))
