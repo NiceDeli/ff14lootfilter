@@ -5,8 +5,8 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.removeConstraint('floor', 'floor_name_unique_column_constraint'); // Replace with your actual constraint name
     await queryInterface.removeConstraint('floor', 'floor_abbreviation_unique_column_constraint'); // Replace with your actual constraint name
-    await queryInterface.removeConstraint('floor_id', 'loot_table_unique_column_constraint'); // Replace with your actual constraint name
-    await queryInterface.removeConstraint('floor_id', 'mita_algorithm_unique_column_constraint'); // Replace with your actual constraint name
+    await queryInterface.removeConstraint('loot_table', 'loot_table_unique_column_constraint'); // Replace with your actual constraint name
+    await queryInterface.removeConstraint('mita_algorithm', 'mita_algorithm_unique_column_constraint'); // Replace with your actual constraint name
     await queryInterface.removeConstraint('kill_history', 'kill_history_unique_column_constraint'); // Replace with your actual constraint name
   },
 
