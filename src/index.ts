@@ -1,6 +1,9 @@
 import express, {application} from 'express';
 import { connectDB } from './config/db.js';
-import {Static_Mates_Router} from "./routes/static_mates.route.js"
+import {Static_Mates_Router} from "./routes/static_mates.routes.js"
+import {Loot_Table_Router} from "./routes/loot_table.routes.js"
+import {Floor_Router} from "./routes/raid_floor.routes.js"
+//import { register } from 'node.module';
 
 // Initialize express app with the correct type
 const app: application = express();
@@ -20,9 +23,10 @@ const startServer = async () => {
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
-
-        app.use('/static_mates', Static_Mates_Router) 
-
+        //this is the url to get info for postman
+        app.use('/static_mates', Static_Mates_Router)
+        app.use('/loot_table', Loot_Table_Router)  
+        app.use('/floor', Floor_Router)
     } catch (error) {
         console.error("Error starting server:", error);
     }

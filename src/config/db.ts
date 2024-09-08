@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize-typescript';  // Import from sequelize-typescript for decorators
 import { StaticMate } from '../models/static_mates.model.js' //Bastardized way of doing it, but it forces it so that .js is always imported
+import { LootTable } from '../models/loot_table.model.js'
+import { Floor } from '../models/floor.model.js'
 
 dotenv.config(); // Load environment variables from .env
 
@@ -14,7 +16,7 @@ const sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
       rejectUnauthorized: false, // Skip SSL certificate validation (adjust based on security needs)
     },
   },
-  models: [StaticMate],  // Register the StaticMate model
+  models: [StaticMate, Floor, LootTable],  // Register the StaticMate model LootTable
 });
 
 
