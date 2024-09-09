@@ -50,7 +50,7 @@ export const createSingleLootTable = async (req, res) => {
         })
         //this is confirming that things worked
         if (single_loot_piece){
-            console.log("loot piece was created", single_loot_piece)
+            console.log("loot piece was created", single_loot_piece.dataValues)
         }
         else {
             throw Error("something went wrong")
