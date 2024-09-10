@@ -93,28 +93,28 @@ export const updateLootTable = async (req, res) => {
 
 }
 
-// ///////Delete
-// export const deleteLootTable = async (req, res) => {
-//     try {
-//         const { id } = req.params;
+///////Delete
+export const deleteLootTable = async (req, res) => {
+    try {
+        const { id } = req.params;
 
-//         const single_static_mate = await LootTable.destroy(
-//             {   
-//                 where: {
-//                     //name: 'Tye Nomad'
-//                 }
-//             }
-//         );
+        const single_loot_piece = await LootTable.destroy(
+            {   
+                where: {
+                    name_of_gear: "Light Heavyweight Chest"
+                }
+            }
+        );
 
-//         if (!single_static_mate) {
-//             return res.status(404).json({ message: "Product not found" });
+        if (!single_loot_piece) {
+            return res.status(404).json({ message: "item not found" });
 
-//         }
-//     }
-//     catch (error) {
-//     //    res.status(500).json({ message: error.message });
-//     }
-// }
+        }
+    }
+    catch (error) {
+    //    res.status(500).json({ message: error.message });
+    }
+}
 
 //createSingleLootTable({params: {gear_piece: "bracelet", gear_name:"Light-heavyweight raid ", floor_level: "m1s", source_of_gear: "Raid", itemLvl:730}}, {});
 //updateLootTable({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {}) 
