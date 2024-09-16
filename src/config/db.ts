@@ -12,15 +12,15 @@ const sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
   logging: (msg) => {
     // Apply green color using ANSI escape codes
     const greenText:string = `\x1b[32m${msg}\x1b[0m`; // Green color
-    const unwantedPatterns: string[] = [
-      '/FROM information_schema\.tables/', // Table existence checks
-      '/FROM pg_class/', // Index and table metadata retrieval
-      '/FROM pg_index/', // Index metadata
-      '/FROM pg_enum/', // Enum type fetching
-      '/FROM pg_type/', // Enum metadata related to types
-      '/FROM pg_catalog\.pg_namespace/', // System namespace queries
-      '/SELECT i\.relname AS name/', // Specific pattern for index fetching
-      '/SELECT 1\+1 AS result/', // Specific pattern to exclude this exact query
+    const unwantedPatterns: RegExp[] = [
+      /FROM information_schema\.tables/, // Table existence checks
+      /FROM pg_class/, // Index and table metadata retrieval
+      /FROM pg_index/, // Index metadata
+      /FROM pg_enum/, // Enum type fetching
+      /FROM pg_type/, // Enum metadata related to types
+      /FROM pg_catalog\.pg_namespace/, // System namespace queries
+      /SELECT i\.relname AS name/, // Specific pattern for index fetching
+      /SELECT 1\+1 AS result/, // Specific pattern to exclude this exact query
     ];
 
     // Log only if the message does not match any unwanted patterns

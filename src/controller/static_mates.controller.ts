@@ -24,7 +24,7 @@ export const findAllStaticMates = async (req, res) => {
 };
 
 //Pull a SINGLE PERSON NEEDS TO BE FIXED
-export const findSingleStaticMate: object = async (req, res) => {
+export const findSingleStaticMate = async (req, res) => {
   try {
     console.log("Calling find one Static Mates");
     const find_single_static_mate: object = await StaticMate.findOne();
@@ -82,7 +82,7 @@ export const createSingleStaticMate = async (req, res) => {
 };
 
 /////Update
-export const updateStaticMate: object = async (req, res) => {
+export const updateStaticMate = async (req, res) => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
@@ -112,7 +112,7 @@ export const updateStaticMate: object = async (req, res) => {
 };
 
 ///////Delete
-export const deleteStaticMate: object = async (req, res) => {
+export const deleteStaticMate = async (req, res) => {
   try {
     const { id } = req.params;
     const single_static_mate = await StaticMate.destroy({

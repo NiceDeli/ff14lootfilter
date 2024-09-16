@@ -5,7 +5,7 @@ import { Loot_Table_Router } from "./routes/loot_table.routes.js";
 import { Floor_Router } from "./routes/raid_floor.routes.js";
 
 // Initialize express app with the correct type
-const app: application = express();
+const app = express();
 
 // Middleware for parsing JSON and URL encoded data
 app.use(express.json());
