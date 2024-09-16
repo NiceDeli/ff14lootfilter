@@ -14,7 +14,7 @@ Floor_Router.get("/AllFloor", findAllFloor);
 Floor_Router.post("/CreateSingleFloor", createSingleFloor);
 
 //PUT METHODS:
-Floor_Router.put("/UpdateSingleFloor", updateFloor);
+Floor_Router.put("/UpdateSingleFloor/:id", updateFloor);
 
 //Delete METHODS:
 //Floor_Router.delete("/DeleteSingleItem", deleteFloor);

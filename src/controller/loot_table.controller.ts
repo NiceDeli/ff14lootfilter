@@ -37,7 +37,7 @@ export const findAllLootTable = async (req, res) => {
 
 ///create
 
-export const createSingleLootTable: object = async (req, res) => {
+export const createSingleLootTable = async (req, res) => {
   try {
     //properties on the query object and the query object is property on the request object
     const createPayload: createPayload = req.body;
@@ -77,7 +77,7 @@ export const createSingleLootTable: object = async (req, res) => {
 };
 
 /////Update
-export const updateLootTable: object = async (req, res) => {
+export const updateLootTable = async (req, res) => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
@@ -108,7 +108,7 @@ export const updateLootTable: object = async (req, res) => {
 };
 
 ///////Delete
-export const deleteLootTable: object = async (req, res) => {
+export const deleteLootTable = async (req, res) => {
   try {
     const { id } = req.params;
     const single_loot_piece = await LootTable.destroy({

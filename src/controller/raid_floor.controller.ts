@@ -1,30 +1,43 @@
 import { UpdatedAt } from "sequelize-typescript";
 import { Floor } from "../models/floor.model.js";
-import { createFloorPayload } from "./types/raid_floor_types.js";
+import { createFloorPayload, FloorServiceReturn, updateFloorPayload } from "./types/raid_floor_types.js";
+import { Request, Response } from 'express'; // Make sure you are importing from express
 
 ///////Read or Pull all
-export const findAllFloor: object = async (req, res) => {
+export const findAllFloor = async (req, res) => {
   try {
     console.log("Calling find all for Loot on the Table");
-    const allFloor: Floor[] = await Floor.findAll();
+    const allFloor: Floor[] = await Floor.findAll({
+      order: [['id', 'asc']]
+    });
     res.status(200).json({
       message: {
         status: "Sucesss",
-        data: "The following was pulled:" + allFloor,
+        data: allFloor,
       },
     });
+
+    return {
+      status: "Sucesss",
+      data: allFloor,
+    }
   } catch (error) {
     res.status(500).json({
       message: {
-        status: "Faliure",
+        status: "Error",
         data: error.message,
       },
     });
+
+    return {
+      status: "Error",
+      data: error.message,
+    }
   }
 };
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
-export const findSingleLootTable: object = async (req, res) => {
+export const findSingleLootTable = async (req, res) => {
   try {
     console.log("Calling find a single floor from raid_floor");
     const findSingleFloor: object = await Floor.findOne();
@@ -44,7 +57,7 @@ export const findSingleLootTable: object = async (req, res) => {
   }
 };
 
-export const createSingleFloor: object = async (req, res) => {
+export const createSingleFloor = async (req, res) => {
   try {
     //properties on the query object and the query object is property on the request object
     const createFloorPayload: createFloorPayload = req.body;
@@ -59,12 +72,17 @@ export const createSingleFloor: object = async (req, res) => {
       floor_name: createFloorPayload.floor_name,
     });
     //this is confirming that things worked
-    return res.status(200).json({
+    res.status(200).json({
       message: {
         status: "Sucess",
         data: "Floor was made!",
       },
     });
+
+    return {
+      status: "Sucess",
+      data: "Floor was made!",
+    }
   } catch (error) {
     res.status(500).json({
       message: {
@@ -76,24 +94,30 @@ export const createSingleFloor: object = async (req, res) => {
 };
 
 /////Update
-export const updateFloor: object = async (req, res) => {
+export const updateFloor = async (req: Request<{id: string}, any, updateFloorPayload>, res:Response):Promise<FloorServiceReturn> => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
-    const { id } = req.params;
-    const { floor_acronym: string, floor_full_name: sting } = req.body;
-    console.log("req.body is reading", req.body);
-    await Floor.update(req.body, {
+    const { id }: {id: string} = req.params;
+    const updateFloorInfo: updateFloorPayload = req.body;
+    console.log("req.body is reading", updateFloorInfo);
+    await Floor.update(updateFloorInfo, {
       where: {
         id: id,
       },
     });
-    return res.status(200).json({
-      message: {
+    //POSTMAN GETS THIS
+    res.status(200).json({
         status: "Sucess",
-        data: "Floor was updated!",
+        data: "Floor was updated! THIS IS FROM RES.JSONNNNNN",
       },
-    });
+    );
+
+    //THIS IS FOR WHEN YOU RETURN BACK THE FUNCTION
+    return {
+      status: "Sucess",
+      data: "Floor was updated!",
+    }
   } catch (error) {
     res.status(500).json({
       message: {
@@ -105,7 +129,7 @@ export const updateFloor: object = async (req, res) => {
 };
 
 ///////Delete
-export const deleteRaidFloor: object = async (req, res) => {
+export const deleteRaidFloor = async (req, res) => {
   try {
     const { id } = req.params;
     const single_Raid_Floor = await Floor.destroy({
