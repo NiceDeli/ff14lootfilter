@@ -50,9 +50,7 @@ export const createSingleFloor: object = async (req, res) => {
     const createFloorPayload: createFloorPayload = req.body;
     console.log("req.body", req.body);
     //find a single pesron
-    const findSingleFloor = await Floor.findOne({
-      where: { floor_abbreviation: createFloorPayload.floor_abbreviation },
-    });
+
     //this is the set up of paramaters for postman
     const single_floor = await Floor.create({
       floor_abbreviation: createFloorPayload.floor_abbreviation,
