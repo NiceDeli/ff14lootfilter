@@ -9,7 +9,7 @@ module.exports = {
       name: 'floor_from_loot_table',
       references:{
         table: 'floor',
-        field: "id"
+        field: 'id'
       },
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'
@@ -21,7 +21,7 @@ module.exports = {
       name: 'floor_from_kill_history',
       references:{
         table: 'floor',
-        field: "id"
+        field: 'id'
       },
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE'

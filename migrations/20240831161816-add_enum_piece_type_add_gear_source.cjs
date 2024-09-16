@@ -22,6 +22,7 @@ module.exports = {
         'weapon_upgrade'
       ),      
       allowNull: false,
+      defaultValue: 'N/A'
     });
 
     await queryInterface.addColumn('loot_table', 'gear_source', {
