@@ -129,12 +129,18 @@ export const updateLootTable = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const findSingleLootTable = async (
-  req: Request, //You should build scalability with queries in the future, this is good for now though
+  req: Request<{ id: number }>, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
     console.log("Calling find a single loot from loot_table");
-    const findSingleLootTable: LootTable = await LootTable.findOne();
+    const { id }: { id: number } = req.params;
+
+    const findSingleLootTable: LootTable = await LootTable.findOne({
+      where: {
+        id: id,
+      }
+    });
 
     res.status(200).json({
       status: "Success",
