@@ -11,7 +11,7 @@ import { Request, Response } from "express"; // Make sure you are importing from
 
 ///////Read or Pull all
 export const findAllFloor = async (
-  req: Request<{ id: string }, any, findFloorPayload>,
+  req: Request,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
@@ -20,22 +20,18 @@ export const findAllFloor = async (
       order: [["id", "asc"]],
     });
     res.status(200).json({
-      message: {
-        status: "Sucesss",
-        data: allFloor,
-      },
+      status: "Sucesss",
+      data: allFloor,
     });
 
     return {
       status: "Sucesss",
-      data: "All floors were read ",
+      data: allFloor,
     };
   } catch (error) {
     res.status(500).json({
-      message: {
-        status: "Error",
-        data: error.message,
-      },
+      status: "Error",
+      data: error.message,
     });
 
     return {
@@ -46,30 +42,35 @@ export const findAllFloor = async (
 };
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
-export const findSingleLootTable = async (
-  req: Request<{ id: string }, any, findFloorPayload>,
+export const getFloor = async (
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
     console.log("Calling find a single floor from raid_floor");
-    const findSingleFloor: object = await Floor.findOne();
-    res.status(200).json({
-      message: {
-        status: "Sucess",
-        data: "Raid floor has been found",
+    const { id }: { id: number } = req.params;
+
+    const findSingleFloor: Floor = await Floor.findOne({
+      where: {
+        id: id,
       },
     });
 
+    res.status(200).json({
+      status: "Success",
+      data: findSingleFloor,
+    });
+
     return {
-      status: "Sucess",
-      data: "Floor was found!",
+      status: "Success",
+      data: findSingleFloor,
     };
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({
-      message: {
-        status: "Faliure",
-        data: "Error trying to find raid floor: " + error,
-      },
+      status: "Error",
+      data: error,
     });
 
     return {
@@ -80,11 +81,7 @@ export const findSingleLootTable = async (
 };
 
 export const createSingleFloor = async (
-  req: Request<
-    { floor_abbreviation: string; floor_name: string },
-    any,
-    createFloorPayload
-  >,
+  req: Request<createFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
@@ -94,29 +91,27 @@ export const createSingleFloor = async (
     //find a single pesron
 
     //this is the set up of paramaters for postman
-    const single_floor = await Floor.create({
+    const new_floor: Floor = await Floor.create({
       floor_abbreviation: createFloorPayload.floor_abbreviation,
       floor_name: createFloorPayload.floor_name,
     });
     //this is confirming that things worked
     res.status(200).json({
-      message: {
-        status: "Sucess",
-        data: "Floor was made!",
-      },
+      status: "Success",
+      data: new_floor,
     });
 
     return {
       status: "Sucess",
-      data: "Floor was made!",
+      data: new_floor,
     };
   } catch (error) {
+    console.error(error);
     res.status(500).json({
-      message: {
-        status: "Error",
-        data: "Floor was unable to be made:" + error,
-      },
+      status: "Error",
+      data: "Floor was unable to be made:" + error,
     });
+
     return {
       status: "Error",
       data: error.message,
@@ -126,78 +121,82 @@ export const createSingleFloor = async (
 
 /////Update
 export const updateFloor = async (
-  req: Request<{ id: string }, any, updateFloorPayload>,
+  req: Request<{ id: number }, any, updateFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
-    const { id }: { id: string } = req.params;
+    const { id }: { id: number } = req.params;
     const updateFloorInfo: updateFloorPayload = req.body;
     console.log("req.body is reading", updateFloorInfo);
-    await Floor.update(updateFloorInfo, {
-      where: {
-        id: id,
-      },
-    });
+
+    const [affectedCount, affectedRows]: [number, Floor[]] = 
+    await Floor.update(
+      updateFloorInfo,
+      {
+        where: {
+          id: id,
+        },
+        returning: true,
+      }
+    );
+
     //POSTMAN GETS THIS
     res.status(200).json({
-      status: "Sucess",
-      data: "Floor was updated! THIS IS FROM RES.JSONNNNNN",
+      status: "Success",
+      data: affectedRows,
     });
 
     //THIS IS FOR WHEN YOU RETURN BACK THE FUNCTION
     return {
       status: "Sucess",
-      data: "Floor was updated!",
+      data: affectedRows,
     };
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({
-      message: {
-        status: "Error",
-        data: "Floor was unable to be updated:" + error,
-      },
+      status: "Error",
+      data: error,
     });
+    
     return {
       status: "Error",
-      data: error.message,
+      data: error,
     };
   }
 };
 
 ///////Delete
 export const deleteRaidFloor = async (
-  req: Request<{ id: string }, any, deleteFloorPayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
-    const { id } = req.params;
-    const single_Raid_Floor = await Floor.destroy({
+    const { id }: { id: number } = req.params;
+    const delete_single_raid_floor: number = await Floor.destroy({
       where: {
         id: id,
       },
     });
     res.status(200).json({
-      message: {
-        status: "Sucess",
-        data: "Floor was deleted!",
-      },
+      status: "Sucess",
+      data: delete_single_raid_floor,
     });
 
     return {
       status: "Sucess",
-      data: "Floor was deleted!",
+      data: delete_single_raid_floor,
     };
   } catch (error) {
     res.status(500).json({
-      message: {
-        status: "Error",
-        data: "Floor was unable to be deleted:" + error,
-      },
+      status: "Error",
+      data: "Floor was unable to be deleted:" + error,
     });
     return {
       status: "Error",
-      data: error.message,
+      data: error,
     };
   }
 };

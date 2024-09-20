@@ -8,10 +8,11 @@ import {
   findStaticMatePayload,
 } from "./types/static_mate_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
+import { errorMonitor } from "stream";
 
 ///////Read or Pull all
 export const findAllStaticMates = async (
-  req: Request<{ id: string }, any, findStaticMatePayload>,
+  req: Request,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
@@ -27,13 +28,14 @@ export const findAllStaticMates = async (
     });
     return {
       status: "Sucess",
-      data: "Static mates were found!",
+      data: allStaticMates,
     };
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       message: {
         status: "Error",
-        data: +error.message,
+        data: error.message,
       },
     });
     return {
@@ -45,29 +47,38 @@ export const findAllStaticMates = async (
 
 //Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const findSingleStaticMate = async (
-  req: Request<{ id: string }, any, findStaticMatePayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
     console.log("Calling find one Static Mates");
-    const find_single_static_mate: object = await StaticMate.findOne();
+    const { id }: { id: number } = req.params;
+
+    const find_single_static_mate: StaticMate = await StaticMate.findOne(
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
     res.status(200).json({
-      message: {
         status: "Sucess",
-        data: "Static Mate found: " + find_single_static_mate,
-      },
+        data: find_single_static_mate,
     });
     return {
-      status: "Sucess!",
-      data: "Static mate was found",
+      status: "Sucess",
+      data: find_single_static_mate,
     };
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       message: {
         status: "Failure",
-        data: "Unable to find static mate" + error,
+        data: error,
       },
     });
+
     return {
       status: "Error",
       data: error.message,
@@ -79,27 +90,30 @@ export const findSingleStaticMate = async (
 
 //adding object to createSingleStaticMate is acting weird
 export const createSingleStaticMate = async (
-  req: Request<{ name: string; role: string }, any, createStaticMatePayload>,
+  req: Request<{ createStaticMatePayload }>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
     //properties on the query object and the query object is property on the request object
     const createStaticMatePayload: createStaticMatePayload = req.body;
     console.log("req.body", req.body);
-    const single_static_mate = await StaticMate.create({
+
+    const single_static_mate: StaticMate = await StaticMate.create({
       name: createStaticMatePayload.name,
       role: createStaticMatePayload.role,
     });
 
     res.status(200).json({
       message: {
-        status: "Sucess",
+        status: "Success",
         data: single_static_mate,
       },
     });
+
     return {
       status: "Sucess",
-      data: "Static Mate was made!",
+      data: single_static_mate,
+
     };
   } catch (error) {
     res.status(500).json({
@@ -117,32 +131,38 @@ export const createSingleStaticMate = async (
 
 /////Update
 export const updateStaticMate = async (
-  req: Request<{ id: string }, any, updateStaticMatePayload>,
+  req: Request<{ id: number }, any, updateStaticMatePayload>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
-    const { id }: { id: string } = req.params;
+    const { id }: { id: number } = req.params;
     const updateStaticMateInfo: updateStaticMatePayload = req.body;
     console.log("req.body is reading:", updateStaticMateInfo);
-    await StaticMate.update(updateStaticMateInfo, {
-      where: {
-        id: id,
-      },
-    });
+    const [affectedCount, affectedRows]: [number, StaticMate[]] = await StaticMate.update(
+      updateStaticMateInfo,
+      {
+        where: {
+          id: id,
+        },
+        returning: true,
+      }
+    );
 
     res.status(200).json({
       message: {
         status: "Sucess",
-        data: "The static member was updated!",
+        data: affectedRows,
       },
     });
     return {
       status: "Sucess",
-      data: "Static Member was updated yay~",
+      data: affectedRows,
     };
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({
       message: {
         status: "Error",
@@ -160,14 +180,12 @@ export const updateStaticMate = async (
 ///////Delete
 //export const deleteStaticMate = async (req: Request<(id: string), any, deleteStaticMatePayload>, res:Response): Promise<StaticMateServiceReturn> => {
 export const deleteStaticMate = async (
-  req: Request<{ id: string }, any, deleteStaticMatePayload>,
+  req: Request<{ id: string }>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
     const { id }: { id: string } = req.params;
-    const deleteStaticMateInfo: deleteStaticMatePayload = req.body;
-    console.log("req.body is reading:", deleteStaticMateInfo);
-    const single_static_mate = await StaticMate.destroy({
+    const delete_static_mate: number = await StaticMate.destroy({
       where: {
         id: id,
       },
@@ -176,23 +194,23 @@ export const deleteStaticMate = async (
     res.status(200).json({
       message: {
         status: "Sucess",
-        data: "Static member is ded. No big surprise",
+        data: delete_static_mate,
       },
     });
     return {
       status: "Sucess",
-      data: "Static mate was deleted!",
+      data: delete_static_mate,
     };
   } catch (error) {
     res.status(500).json({
       message: {
         status: "Error",
-        data: "Unable to delete the static member?",
+        data: error,
       },
     });
     return {
       status: "Error",
-      data: error.message,
+      data: error,
     };
   }
 };

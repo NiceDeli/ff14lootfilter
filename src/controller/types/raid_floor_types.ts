@@ -1,3 +1,5 @@
+import { Floor } from "../../models/floor.model";
+
 export interface createFloorPayload {
   floor_abbreviation: string;
   floor_name: string;
@@ -5,7 +7,7 @@ export interface createFloorPayload {
 
 export interface FloorServiceReturn {
   status: string;
-  data: string;
+  data: string | Floor | Floor[] | number;
 }
 
 export interface updateFloorPayload {
