@@ -14,7 +14,7 @@ import { Floor } from "../models/floor.model.js";
 ///////Read or Pull all
 //need to add promises
 export const findAllLootTable = async (
-  req: Request<{ id: string }, any, findLootTablePayload>,
+  req: Request,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
@@ -32,10 +32,8 @@ export const findAllLootTable = async (
     };
   } catch (error) {
     res.status(500).json({
-      message: {
         status: "Error",
         data: error.message,
-      },
     });
     return {
       status: "Error",
@@ -46,17 +44,7 @@ export const findAllLootTable = async (
 ///create
 
 export const createSingleLootTable = async (
-  req: Request<
-    {
-      piece_type: string;
-      name_of_gear: string;
-      floor_id: number;
-      gear_source: string;
-      iLvl: number;
-    },
-    any,
-    createPayload
-  >,
+  req: Request<createPayload>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
@@ -65,7 +53,7 @@ export const createSingleLootTable = async (
     console.log("req.body", req.body);
 
     //this is the set up of paramaters for postman
-    const single_loot_piece: object = await LootTable.create({
+    const single_loot_piece: LootTable = await LootTable.create({
       piece_type: createPayload.piece_type,
       name_of_gear: createPayload.name_of_gear,
       floor_id: createPayload.floor_id,
@@ -82,15 +70,13 @@ export const createSingleLootTable = async (
 
     return {
       status: "Sucess",
-      data: "Item was made!",
+      data: single_loot_piece
     };
   } catch (error) {
     console.log("we had an error: ", error);
     res.status(500).json({
-      message: {
-        status: "Error",
-        data: "Item was unable to be made" + error,
-      },
+      status: "Error",
+      data: "Item was unable to be made" + error,
     });
 
     return {
@@ -102,7 +88,7 @@ export const createSingleLootTable = async (
 
 /////Update
 export const updateLootTable = async (
-  req: Request<{ id: string }, any, updateLootTablePayload>,
+  req: Request<{ id: string }, updateLootTablePayload>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
@@ -111,29 +97,27 @@ export const updateLootTable = async (
     const { id }: { id: string } = req.params;
     const updateLootTableInfo: updateLootTablePayload = req.body;
     console.log("req.body is reading:", updateLootTableInfo);
-    await LootTable.update(updateLootTableInfo, {
+
+    const [affectedCount, affectedRows]: [number, LootTable[]] = await LootTable.update(updateLootTableInfo, {
       where: {
         id: id,
       },
+      returning: true, 
     });
 
     res.status(200).json({
-      message: {
-        status: "Sucess",
-        data: "The item was updated!",
-      },
+      status: "Sucess",
+      data: affectedRows
     });
 
     return {
       status: "Sucess",
-      data: "Item was updated!",
+      data: affectedRows,
     };
   } catch (error) {
     res.status(500).json({
-      message: {
-        status: "Failure",
-        data: "The item was not updated because: " + error,
-      },
+      status: "Failure",
+      data: error,
     });
 
     return {
@@ -145,29 +129,26 @@ export const updateLootTable = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const findSingleLootTable = async (
-  req: Request<{ id: string }, any, findLootTablePayload>,
+  req: Request, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
     console.log("Calling find a single loot from loot_table");
-    const findSingleLootTable: object = await LootTable.findOne();
+    const findSingleLootTable: LootTable = await LootTable.findOne();
+
     res.status(200).json({
-      message: {
-        status: "Sucess",
-        data: "Loot has been found",
-      },
+      status: "Success",
+      data: findSingleLootTable
     });
 
     return {
-      status: "Sucess",
-      data: "Loot was found!",
+      status: "Success",
+      data: findSingleLootTable,
     };
   } catch (error) {
     res.status(500).json({
-      message: {
-        status: "Faliure",
-        data: "Error trying to find Loot" + error,
-      },
+      status: "Faliure",
+      data: "Error trying to find Loot" + error,
     });
 
     return {
@@ -179,28 +160,26 @@ export const findSingleLootTable = async (
 
 ///////Delete
 export const deleteLootTable = async (
-  req: Request<{ id: string }, any, deleteLootTablePayload>,
+  req: Request<{ id: string }>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
     const { id } = req.params;
-    const single_loot_piece = await LootTable.destroy({
+    const single_loot_piece:number = await LootTable.destroy({
       where: {
         id: id,
       },
     });
 
-    return {
-      status: "Sucess",
-      data: "Delete was sucessful!",
-    };
-
     res.status(200).json({
-      message: {
-        status: "Sucess",
-        data: "Item is ded. No big surprise",
-      },
+      status: "Success",
+      data: single_loot_piece,
     });
+
+    return {
+      status: "Success",
+      data: single_loot_piece,
+    };
   } catch (error) {
     res.status(500).json({
       message: {

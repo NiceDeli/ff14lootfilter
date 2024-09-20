@@ -7,7 +7,7 @@ import { StaticMate } from "../models/static_mates.model.js"; //Bastardized way 
 dotenv.config(); // Load environment variables from .env
 
 // Initialize Sequelize instance with models
-const sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
+const sequelize:Sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
   dialect: "postgres",
   logging: (msg) => {
     // Apply green color using ANSI escape codes
@@ -38,7 +38,7 @@ const sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
 });
 
 // Function to connect to the database
-export const connectDB = async () => {
+export const connectDB = async ():Promise<void> => {
   try {
     // Test connection
     await sequelize.authenticate();

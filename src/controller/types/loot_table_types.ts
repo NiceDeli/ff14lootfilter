@@ -10,7 +10,7 @@ export interface createPayload {
 
 export interface LootTableServiceReturn {
     status: string;
-    data: string | LootTable[];
+    data: string | LootTable | LootTable[] | number;
 }
 
 export interface updateLootTablePayload {
