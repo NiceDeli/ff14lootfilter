@@ -1,55 +1,70 @@
 import { UpdatedAt } from "sequelize-typescript";
 import { LootTable } from "../models/loot_table.model.js";
-import { createPayload } from "./types/loot_table_types.js";
+import {
+  createPayload,
+  updateLootTablePayload,
+  LootTableServiceReturn,
+  findLootTablePayload,
+  deleteLootTablePayload,
+} from "./types/loot_table_types.js";
+import { Request, Response } from "express"; // Make sure you are importing from express
+import { StaticMateServiceReturn } from "./types/static_mate_types.js";
 
 ///////Read or Pull all
 //need to add promises
-export const findAllLootTable = async (req, res) => {
+export const findAllLootTable = async (
+  req: Request<{ id: string }, any, findLootTablePayload>,
+  res: Response
+): Promise<LootTableServiceReturn> => {
   try {
     console.log("Calling find all for Loot on the Table");
-    const allLootTables: LootTable[] = await LootTable.findAll();
+    const allLootTables: LootTable[] = await LootTable.findAll({
+      order: [["id", "asc"]],
+    });
     res.status(200).json({
       message: {
         status: "Sucesss",
-        data: "The following was pulled:" + allLootTables,
+        data: allLootTables,
       },
     });
+    return {
+      status: "Sucess",
+      data: "Loot Tables were found!",
+    };
   } catch (error) {
     res.status(500).json({
       message: {
-        status: "Faliure",
+        status: "Error",
         data: error.message,
       },
     });
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
-
-// // Pull a SINGLE PERSON NEEDS TO BE FIXED
-// export const findSingleLootTable = async (req, res) => {
-//     try {
-//         console.log("Calling find all for Static Mates")
-//         const allLootTables:LootTable[] = await LootTable.findAll();
-//         res.status(200).json({message: allLootTables})
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// }
-
 ///create
 
-export const createSingleLootTable = async (req, res) => {
+export const createSingleLootTable = async (
+  req: Request<
+    {
+      piece_type: string;
+      name_of_gear: string;
+      floor_id: number;
+      gear_source: string;
+      iLvl: number;
+    },
+    any,
+    createPayload
+  >,
+  res: Response
+): Promise<LootTableServiceReturn> => {
   try {
     //properties on the query object and the query object is property on the request object
     const createPayload: createPayload = req.body;
     console.log("req.body", req.body);
-    //find a single pesron
-    const findSingleLootTable: object = await LootTable.findOne({
-      where: { name_of_gear: createPayload.name_of_gear },
-    });
-    if (findSingleLootTable) {
-      throw Error("There was already loot piece with that name");
-      return;
-    }
+
     //this is the set up of paramaters for postman
     const single_loot_piece: object = await LootTable.create({
       piece_type: createPayload.piece_type,
@@ -59,12 +74,17 @@ export const createSingleLootTable = async (req, res) => {
       iLvl: createPayload.iLvl,
     });
     //this is confirming that things worked
-    return res.status(200).json({
+    res.status(200).json({
       message: {
         status: "Sucesss",
-        data: "The following was created:" + single_loot_piece,
+        data: single_loot_piece,
       },
     });
+
+    return {
+      status: "Sucess",
+      data: "Item was made!",
+    };
   } catch (error) {
     console.log("we had an error: ", error);
     res.status(500).json({
@@ -73,19 +93,26 @@ export const createSingleLootTable = async (req, res) => {
         data: "Item was unable to be made" + error,
       },
     });
+
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 
 /////Update
-export const updateLootTable = async (req, res) => {
+export const updateLootTable = async (
+  req: Request<{ id: string }, any, updateLootTablePayload>,
+  res: Response
+): Promise<LootTableServiceReturn> => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
-    const { id } = req.params;
-    const { gear_piece, gear_name, floor_level, source_of_gear, itemLvl } =
-      req.body;
-    console.log("req.body is reading:" + req.body);
-    await LootTable.update(req.body, {
+    const { id }: { id: string } = req.params;
+    const updateLootTableInfo: updateLootTablePayload = req.body;
+    console.log("req.body is reading:", updateLootTableInfo);
+    await LootTable.update(updateLootTableInfo, {
       where: {
         id: id,
       },
@@ -97,6 +124,11 @@ export const updateLootTable = async (req, res) => {
         data: "The item was updated!",
       },
     });
+
+    return {
+      status: "Sucess",
+      data: "Item was updated!",
+    };
   } catch (error) {
     res.status(500).json({
       message: {
@@ -104,11 +136,53 @@ export const updateLootTable = async (req, res) => {
         data: "The item was not updated because: " + error,
       },
     });
+
+    return {
+      status: "Error",
+      data: error.message,
+    };
+  }
+};
+
+// Pull a SINGLE PERSON NEEDS TO BE FIXED
+export const findSingleLootTable = async (
+  req: Request<{ id: string }, any, findLootTablePayload>,
+  res: Response
+): Promise<LootTableServiceReturn> => {
+  try {
+    console.log("Calling find a single loot from loot_table");
+    const findSingleLootTable: object = await LootTable.findOne();
+    res.status(200).json({
+      message: {
+        status: "Sucess",
+        data: "Loot has been found",
+      },
+    });
+
+    return {
+      status: "Sucess",
+      data: "Loot was found!",
+    };
+  } catch (error) {
+    res.status(500).json({
+      message: {
+        status: "Faliure",
+        data: "Error trying to find Loot" + error,
+      },
+    });
+
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 
 ///////Delete
-export const deleteLootTable = async (req, res) => {
+export const deleteLootTable = async (
+  req: Request<{ id: string }, any, deleteLootTablePayload>,
+  res: Response
+): Promise<LootTableServiceReturn> => {
   try {
     const { id } = req.params;
     const single_loot_piece = await LootTable.destroy({
@@ -116,7 +190,13 @@ export const deleteLootTable = async (req, res) => {
         id: id,
       },
     });
-    return res.status(200).json({
+
+    return {
+      status: "Sucess",
+      data: "Delete was sucessful!",
+    };
+
+    res.status(200).json({
       message: {
         status: "Sucess",
         data: "Item is ded. No big surprise",
@@ -129,6 +209,10 @@ export const deleteLootTable = async (req, res) => {
         data: "Unable to delete the item?",
       },
     });
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 

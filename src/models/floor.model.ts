@@ -8,8 +8,13 @@ import {
   Table,
   Model,
   UpdatedAt,
+  HasMany,
+  ForeignKey,
+  BelongsTo,
+  NotNull,
 } from "sequelize-typescript";
 
+import { LootTable } from "../models/loot_table.model.js";
 @Table({
   freezeTableName: true,
   tableName: "floor",
@@ -19,6 +24,7 @@ export class Floor extends Model<Floor> {
   @AllowNull(false)
   @PrimaryKey
   @Column(DataType.INTEGER)
+  //@HasMany(() => LootTable, 'floor_id')
   id: number;
 
   @AllowNull(false)
@@ -39,3 +45,6 @@ export class Floor extends Model<Floor> {
   @Column(DataType.DATE)
   updatedAt: Date;
 }
+
+// LootTable.hasMany(Floor, { foreignKey: 'id', as: 'floor_id' });
+// Floor.belongsTo(LootTable, { foreignKey: 'id', as: 'raid_floor_id' });

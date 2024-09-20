@@ -14,7 +14,7 @@ Loot_Table_Router.get("/AllLoot", findAllLootTable);
 Loot_Table_Router.post("/CreateSingleItem", createSingleLootTable);
 
 //PUT METHODS:
-Loot_Table_Router.put("/UpdateSingleItem", updateLootTable);
+Loot_Table_Router.put("/UpdateSingleItem:id", updateLootTable);
 
 //Delete METHODS:
-Loot_Table_Router.delete("/DeleteSingleItem", deleteLootTable);
+Loot_Table_Router.delete("/DeleteSingleItem:id", deleteLootTable);

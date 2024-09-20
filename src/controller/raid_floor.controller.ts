@@ -1,14 +1,23 @@
 import { UpdatedAt } from "sequelize-typescript";
 import { Floor } from "../models/floor.model.js";
-import { createFloorPayload, FloorServiceReturn, updateFloorPayload } from "./types/raid_floor_types.js";
-import { Request, Response } from 'express'; // Make sure you are importing from express
+import {
+  createFloorPayload,
+  FloorServiceReturn,
+  updateFloorPayload,
+  findFloorPayload,
+  deleteFloorPayload,
+} from "./types/raid_floor_types.js";
+import { Request, Response } from "express"; // Make sure you are importing from express
 
 ///////Read or Pull all
-export const findAllFloor = async (req, res) => {
+export const findAllFloor = async (
+  req: Request<{ id: string }, any, findFloorPayload>,
+  res: Response
+): Promise<FloorServiceReturn> => {
   try {
     console.log("Calling find all for Loot on the Table");
     const allFloor: Floor[] = await Floor.findAll({
-      order: [['id', 'asc']]
+      order: [["id", "asc"]],
     });
     res.status(200).json({
       message: {
@@ -19,8 +28,8 @@ export const findAllFloor = async (req, res) => {
 
     return {
       status: "Sucesss",
-      data: allFloor,
-    }
+      data: "All floors were read ",
+    };
   } catch (error) {
     res.status(500).json({
       message: {
@@ -32,32 +41,52 @@ export const findAllFloor = async (req, res) => {
     return {
       status: "Error",
       data: error.message,
-    }
+    };
   }
 };
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
-export const findSingleLootTable = async (req, res) => {
+export const findSingleLootTable = async (
+  req: Request<{ id: string }, any, findFloorPayload>,
+  res: Response
+): Promise<FloorServiceReturn> => {
   try {
     console.log("Calling find a single floor from raid_floor");
     const findSingleFloor: object = await Floor.findOne();
     res.status(200).json({
       message: {
         status: "Sucess",
-        data: "Raid floor has been updated",
+        data: "Raid floor has been found",
       },
     });
+
+    return {
+      status: "Sucess",
+      data: "Floor was found!",
+    };
   } catch (error) {
     res.status(500).json({
       message: {
         status: "Faliure",
-        data: "Error trying to update raid floor: " + error,
+        data: "Error trying to find raid floor: " + error,
       },
     });
+
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 
-export const createSingleFloor = async (req, res) => {
+export const createSingleFloor = async (
+  req: Request<
+    { floor_abbreviation: string; floor_name: string },
+    any,
+    createFloorPayload
+  >,
+  res: Response
+): Promise<FloorServiceReturn> => {
   try {
     //properties on the query object and the query object is property on the request object
     const createFloorPayload: createFloorPayload = req.body;
@@ -80,7 +109,7 @@ export const createSingleFloor = async (req, res) => {
     return {
       status: "Sucess",
       data: "Floor was made!",
-    }
+    };
   } catch (error) {
     res.status(500).json({
       message: {
@@ -88,15 +117,22 @@ export const createSingleFloor = async (req, res) => {
         data: "Floor was unable to be made:" + error,
       },
     });
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 
 /////Update
-export const updateFloor = async (req: Request<{id: string}, any, updateFloorPayload>, res:Response):Promise<FloorServiceReturn> => {
+export const updateFloor = async (
+  req: Request<{ id: string }, any, updateFloorPayload>,
+  res: Response
+): Promise<FloorServiceReturn> => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
-    const { id }: {id: string} = req.params;
+    const { id }: { id: string } = req.params;
     const updateFloorInfo: updateFloorPayload = req.body;
     console.log("req.body is reading", updateFloorInfo);
     await Floor.update(updateFloorInfo, {
@@ -106,16 +142,15 @@ export const updateFloor = async (req: Request<{id: string}, any, updateFloorPay
     });
     //POSTMAN GETS THIS
     res.status(200).json({
-        status: "Sucess",
-        data: "Floor was updated! THIS IS FROM RES.JSONNNNNN",
-      },
-    );
+      status: "Sucess",
+      data: "Floor was updated! THIS IS FROM RES.JSONNNNNN",
+    });
 
     //THIS IS FOR WHEN YOU RETURN BACK THE FUNCTION
     return {
       status: "Sucess",
       data: "Floor was updated!",
-    }
+    };
   } catch (error) {
     res.status(500).json({
       message: {
@@ -123,11 +158,18 @@ export const updateFloor = async (req: Request<{id: string}, any, updateFloorPay
         data: "Floor was unable to be updated:" + error,
       },
     });
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 
 ///////Delete
-export const deleteRaidFloor = async (req, res) => {
+export const deleteRaidFloor = async (
+  req: Request<{ id: string }, any, deleteFloorPayload>,
+  res: Response
+): Promise<FloorServiceReturn> => {
   try {
     const { id } = req.params;
     const single_Raid_Floor = await Floor.destroy({
@@ -135,12 +177,17 @@ export const deleteRaidFloor = async (req, res) => {
         id: id,
       },
     });
-    return res.status(200).json({
+    res.status(200).json({
       message: {
         status: "Sucess",
         data: "Floor was deleted!",
       },
     });
+
+    return {
+      status: "Sucess",
+      data: "Floor was deleted!",
+    };
   } catch (error) {
     res.status(500).json({
       message: {
@@ -148,6 +195,10 @@ export const deleteRaidFloor = async (req, res) => {
         data: "Floor was unable to be deleted:" + error,
       },
     });
+    return {
+      status: "Error",
+      data: error.message,
+    };
   }
 };
 

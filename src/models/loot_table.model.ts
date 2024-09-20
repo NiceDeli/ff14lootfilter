@@ -8,8 +8,12 @@ import {
   Table,
   Model,
   UpdatedAt,
+  ForeignKey,
+  BelongsTo,
+  HasMany,
 } from "sequelize-typescript";
 
+import "../config/db.js";
 import { Floor } from "../models/floor.model.js";
 @Table({
   freezeTableName: true,
@@ -45,22 +49,7 @@ export class LootTable extends Model<LootTable> {
   @Column(DataType.STRING)
   name_of_gear: string;
 
-  static associate(models) {
-    LootTable.belongsTo(models.floor);
-    models.floor.hasMany(LootTable);
-  }
-
-  //   LootTable.belongsTo(floor, {
-  //     ForeignKey: 'id',
-  //     as: 'floor_id'
-  //   });
-
-  //   floor.belongsTo(LootTable, {
-  //     foreignKey: 'id',
-  //     as: 'id'
-  //   })
-
-  // @ForeignKey()
+  //  @BelongsTo(() => Floor, 'id')
   @AllowNull(false)
   @Column(DataType.STRING)
   floor_id: number;
@@ -78,10 +67,11 @@ export class LootTable extends Model<LootTable> {
   @Column(DataType.DATE)
   createdAt: Date;
 
-  // @BelongsTo(()=>Floor)
-  // Floor:Floor;
   @AllowNull(false)
   @UpdatedAt
   @Column(DataType.DATE)
   updatedAt: Date;
 }
+
+// LootTable.hasMany(Floor, { foreignKey: 'id', as: 'floor_id' });
+// Floor.belongsTo(LootTable, { foreignKey: 'id', as: 'raid_floor_id' });
