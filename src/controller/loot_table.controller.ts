@@ -9,6 +9,7 @@ import {
 } from "./types/loot_table_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
 import { StaticMateServiceReturn } from "./types/static_mate_types.js";
+import { Floor } from "../models/floor.model.js";
 
 ///////Read or Pull all
 //need to add promises
@@ -22,14 +23,12 @@ export const findAllLootTable = async (
       order: [["id", "asc"]],
     });
     res.status(200).json({
-      message: {
         status: "Sucesss",
         data: allLootTables,
-      },
     });
     return {
       status: "Sucess",
-      data: "Loot Tables were found!",
+      data: allLootTables
     };
   } catch (error) {
     res.status(500).json({

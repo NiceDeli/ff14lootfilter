@@ -1,3 +1,5 @@
+import { LootTable } from "../../models/loot_table.model";
+
 export interface createPayload {
     piece_type: string;
     name_of_gear: string;
@@ -8,7 +10,7 @@ export interface createPayload {
 
 export interface LootTableServiceReturn {
     status: string;
-    data: string;
+    data: string | LootTable[];
 }
 
 export interface updateLootTablePayload {

@@ -12,6 +12,7 @@ import {
   ForeignKey,
   BelongsTo,
   NotNull,
+  HasOne,
 } from "sequelize-typescript";
 
 import { LootTable } from "../models/loot_table.model.js";
@@ -24,7 +25,6 @@ export class Floor extends Model<Floor> {
   @AllowNull(false)
   @PrimaryKey
   @Column(DataType.INTEGER)
-  //@HasMany(() => LootTable, 'floor_id')
   id: number;
 
   @AllowNull(false)
@@ -44,7 +44,7 @@ export class Floor extends Model<Floor> {
   @UpdatedAt
   @Column(DataType.DATE)
   updatedAt: Date;
-}
 
-// LootTable.hasMany(Floor, { foreignKey: 'id', as: 'floor_id' });
-// Floor.belongsTo(LootTable, { foreignKey: 'id', as: 'raid_floor_id' });
+  @HasMany(() => LootTable)
+  lootTable: LootTable[]; //Possibility for lootTable to be part of the Floor Object if we add include in the query
+}
