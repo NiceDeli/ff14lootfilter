@@ -1,3 +1,4 @@
+import "../config/db.js";
 import {
   AllowNull,
   AutoIncrement,
@@ -20,6 +21,7 @@ import { LootTable } from "../models/loot_table.model.js";
   freezeTableName: true,
   tableName: "floor",
 })
+
 export class Floor extends Model<Floor> {
   @AutoIncrement
   @AllowNull(false)
@@ -48,3 +50,4 @@ export class Floor extends Model<Floor> {
   @HasMany(() => LootTable)
   lootTable: LootTable[]; //Possibility for lootTable to be part of the Floor Object if we add include in the query
 }
+

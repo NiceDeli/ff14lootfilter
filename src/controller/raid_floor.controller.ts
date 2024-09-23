@@ -10,7 +10,7 @@ import {
 import { Request, Response } from "express"; // Make sure you are importing from express
 
 ///////Read or Pull all
-export const findAllFloor = async (
+export const getAllFloor = async (
   req: Request,
   res: Response
 ): Promise<FloorServiceReturn> => {
@@ -50,7 +50,7 @@ export const getFloor = async (
     console.log("Calling find a single floor from raid_floor");
     const { id }: { id: number } = req.params;
 
-    const findSingleFloor: Floor = await Floor.findOne({
+    const getSingleFloor: Floor = await Floor.findOne({
       where: {
         id: id,
       },
@@ -58,12 +58,12 @@ export const getFloor = async (
 
     res.status(200).json({
       status: "Success",
-      data: findSingleFloor,
+      data: getSingleFloor,
     });
 
     return {
       status: "Success",
-      data: findSingleFloor,
+      data: getSingleFloor,
     };
 
   } catch (error) {
