@@ -15,20 +15,25 @@ export const findAllStaticMates = async (
   req: Request,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
+
   try {
+    //finaAllStaticMates = static_name, raid_member_role
+    const getAllStaticMates = req.query;
     console.log("Calling find all for Static Mates");
-    const allStaticMates: StaticMate[] = await StaticMate.findAll({
+    const getStaticMates: StaticMate[] = await StaticMate.findAll({
+      where: getAllStaticMates, //static_name, raid_member_role
+      
       order: [["id", "asc"]],
     });
     res.status(200).json({
       message: {
         status: "Sucess",
-        data: allStaticMates,
+        data: getAllStaticMates,
       },
     });
     return {
       status: "Sucess",
-      data: allStaticMates,
+      data: getStaticMates,
     };
   } catch (error) {
     console.error(error);
@@ -218,3 +223,15 @@ export const deleteStaticMate = async (
 //createSingleStaticMate({params: {static_name: "Lupin Meowikir", raid_member_role: "Caster DPS"}}, {});
 //updateStaticMate({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {})
 //the second half is the response so you can chain controllers to each other the second object is also a res
+
+
+// for(const key in getAllStaticMates) {
+//   if(!unit_keys.includes(key) {
+//   return {
+//   status: 'Error',
+//   data:  Invalid Field ${keys}
+  
+// }
+//   }
+  
+//   }

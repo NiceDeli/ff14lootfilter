@@ -37,9 +37,6 @@ Floor_Router.get("/:floor_abbreviation", async (req, res)=> {
   const {floor_abbreviation} = req.params;
   try{
     const where = {};
-    if (floor_abbreviation){
-      floor_abbreviation = floor_abbreviation
-    }
     const get_single_floor = getFloor; 
     res.send(getFloor);
   }

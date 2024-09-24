@@ -75,6 +75,6 @@ export class LootTable extends Model<LootTable> {
   @Column(DataType.DATE)
   updatedAt: Date;
 
-  // @BelongsTo(() => Floor, '')// Define that LootTable belongs to Floor
-  // floor:Floor //Possibility for lootTable to be part of the Floor Object if we add include in the query
+  @BelongsTo(() => Floor)// Define that LootTable belongs to Floor
+  floor:Floor //Possibility for lootTable to be part of the Floor Object if we add include in the query
 }

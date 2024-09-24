@@ -7,8 +7,7 @@ import { deleteStaticMate } from "../controller/static_mates.controller.js";
 export const Static_Mates_Router = express.Router();
 
 // //GET METHODS:
-Static_Mates_Router.get("/", findAllStaticMates);
-//Static_Mates_Router.get("/:id", findSingleStaticMate);
+Static_Mates_Router.get("/AllStaticMates",findAllStaticMates);
 
 //POST METHODS:
 Static_Mates_Router.post("/createSingleStaticMate", createSingleStaticMate);
