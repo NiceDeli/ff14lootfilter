@@ -1,27 +1,10 @@
-import "../config/db.js";
-import {
-  AllowNull,
-  AutoIncrement,
-  Column,
-  CreatedAt,
-  DataType,
-  PrimaryKey,
-  Table,
-  Model,
-  UpdatedAt,
-  ForeignKey,
-  BelongsTo,
-  HasMany,
-  HasOne,
-} from "sequelize-typescript";
+import { AllowNull, AutoIncrement, Column, DataType, PrimaryKey, Table, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
+import { Floor } from "./floor.model.js"; // Ensure this import exists
 
-import { Floor } from "../models/floor.model.js";
 @Table({
   freezeTableName: true,
   tableName: "loot_table",
 })
-
-
 export class LootTable extends Model<LootTable> {
   @AutoIncrement
   @AllowNull(false)
@@ -30,22 +13,7 @@ export class LootTable extends Model<LootTable> {
   id: number;
 
   @AllowNull(false)
-  @Column(
-    DataType.ENUM(
-      "accessory_upgrade",
-      "armor_upgrade",
-      "bracelet",
-      "chest",
-      "earrings",
-      "feet",
-      "gloves",
-      "head",
-      "legs",
-      "necklace",
-      "ring",
-      "offhand"
-    )
-  )
+  @Column(DataType.ENUM("accessory_upgrade", "armor_upgrade", "bracelet", "chest", "earrings", "feet", "gloves", "head", "legs", "necklace", "ring", "offhand"))
   piece_type: string;
 
   @AllowNull(false)
@@ -53,8 +21,8 @@ export class LootTable extends Model<LootTable> {
   name_of_gear: string;
 
   @AllowNull(false)
-  @Column(DataType.NUMBER)
-  @ForeignKey(() => Floor)
+  @ForeignKey(() => Floor) // Foreign key references Floor
+  @Column(DataType.INTEGER)
   floor_id: number;
 
   @AllowNull(false)
@@ -66,15 +34,13 @@ export class LootTable extends Model<LootTable> {
   iLvl: number;
 
   @AllowNull(false)
-  @CreatedAt
   @Column(DataType.DATE)
   createdAt: Date;
 
   @AllowNull(false)
-  @UpdatedAt
   @Column(DataType.DATE)
   updatedAt: Date;
 
-  @BelongsTo(() => Floor)// Define that LootTable belongs to Floor
-  floor:Floor //Possibility for lootTable to be part of the Floor Object if we add include in the query
+  // @BelongsTo(() => import('./floor.model.js').then(m => m.Floor))  // Lazy loading the Floor model using import()
+  floor: Floor;  // Adjusted TypeScript type
 }

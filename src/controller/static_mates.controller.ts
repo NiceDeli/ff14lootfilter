@@ -1,4 +1,3 @@
-import { UpdatedAt } from "sequelize-typescript";
 import { StaticMate } from "../models/static_mates.model.js";
 import {
   createStaticMatePayload,

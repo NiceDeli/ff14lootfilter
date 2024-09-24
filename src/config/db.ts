@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
-import { Sequelize } from "sequelize-typescript"; // Import from sequelize-typescript for decorators
+import { Sequelize } from "sequelize-typescript";
+import { StaticMate } from "../models/static_mates.model.js";
 import { Floor } from "../models/floor.model.js";
 import { LootTable } from "../models/loot_table.model.js";
-import { StaticMate } from "../models/static_mates.model.js"; //Bastardized way of doing it, but it forces it so that .js is always imported
 
 dotenv.config(); // Load environment variables from .env
 
@@ -34,8 +34,14 @@ const sequelize:Sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
       rejectUnauthorized: false, // Skip SSL certificate validation (adjust based on security needs)
     },
   },
-  models: [StaticMate, Floor, LootTable, ], // Register the StaticMate model LootTable
+  models: [Floor, LootTable, StaticMate], // Register all models here
 });
+
+// Function to define associations after models are initialized
+export const defineAssociations = () => {
+  LootTable.belongsTo(Floor, { foreignKey: 'floor_id' });
+  Floor.hasMany(LootTable, { foreignKey: 'floor_id' });
+};
 
 // Function to connect to the database
 export const connectDB = async ():Promise<void> => {
