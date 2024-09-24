@@ -1,4 +1,4 @@
-import { UpdatedAt } from "sequelize-typescript";
+console.log("Floor Table model is being loaded");
 import { LootTable } from "../models/loot_table.model.js";
 import {
   createPayload,
@@ -8,8 +8,6 @@ import {
   deleteLootTablePayload,
 } from "./types/loot_table_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
-import { StaticMateServiceReturn } from "./types/static_mate_types.js";
-import { Floor } from "../models/floor.model.js";
 
 ///////Read or Pull all
 //need to add promises

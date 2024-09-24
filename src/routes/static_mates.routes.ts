@@ -1,6 +1,5 @@
 import express from "express";
 import { findAllStaticMates } from "../controller/static_mates.controller.js";
-//import {findSingleStaticMate} from '../controller/static_mates.controller.js'
 import { createSingleStaticMate } from "../controller/static_mates.controller.js";
 import { updateStaticMate } from "../controller/static_mates.controller.js";
 import { deleteStaticMate } from "../controller/static_mates.controller.js";
