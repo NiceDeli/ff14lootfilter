@@ -16,8 +16,10 @@ export const findAllLootTable = async (
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
+    const getAllLoot= req.query;
     console.log("Calling find all for Loot on the Table");
     const allLootTables: LootTable[] = await LootTable.findAll({
+      where: getAllLoot,
       order: [["id", "asc"]],
     });
     res.status(200).json({
@@ -46,12 +48,14 @@ export const findSingleLootTable = async (
   req: Request<{ id: number }>, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<LootTableServiceReturn> => {
+  const findSingleLoot = req.query;
   try {
     console.log("Calling find a single loot from loot_table");
     const { id }: { id: number } = req.params;
 
     const findSingleLootTable: LootTable = await LootTable.findOne({
-      where: {
+      where: 
+      {
         id: id,
       },
     });

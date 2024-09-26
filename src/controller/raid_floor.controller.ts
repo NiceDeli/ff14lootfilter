@@ -8,15 +8,17 @@ import {
   deleteFloorPayload,
 } from "./types/raid_floor_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
-
+import { errorMonitor } from "stream";
 ///////Read or Pull all
 export const getAllFloor = async (
   req: Request,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
+    const getAllFloor = req.query;
     console.log("Calling find all for Loot on the Table");
     const allFloor: Floor[] = await Floor.findAll({
+      where: getAllFloor,
       order: [["id", "asc"]],
     });
     res.status(200).json({
@@ -48,8 +50,8 @@ export const getFloor = async (
 ): Promise<FloorServiceReturn> => {
   try {
     console.log("Calling find a single floor from raid_floor");
+    const getSingleRaidFloor = req.query;
     const { id }: { id: number } = req.params;
-
     const getSingleFloor: Floor = await Floor.findOne({
       where: {
         id: id,
@@ -86,6 +88,7 @@ export const createSingleFloor = async (
 ): Promise<FloorServiceReturn> => {
   try {
     //properties on the query object and the query object is property on the request object
+    const createSingleFloor = req.query;
     const createFloorPayload: createFloorPayload = req.body;
     console.log("req.body", req.body);
     //find a single pesron
@@ -127,6 +130,7 @@ export const updateFloor = async (
   try {
     //do a find first to see if that thing exist
     //also ends things early
+    const updateFloor = req.query;
     const { id }: { id: number } = req.params;
     const updateFloorInfo: updateFloorPayload = req.body;
     console.log("req.body is reading", updateFloorInfo);
@@ -174,6 +178,7 @@ export const deleteRaidFloor = async (
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
+    const deleteSingleFloor = req.query;
     const { id }: { id: number } = req.params;
     const delete_single_raid_floor: number = await Floor.destroy({
       where: {

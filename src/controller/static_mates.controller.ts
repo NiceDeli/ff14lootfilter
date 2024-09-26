@@ -20,8 +20,7 @@ export const findAllStaticMates = async (
     const getAllStaticMates = req.query;
     console.log("Calling find all for Static Mates");
     const getStaticMates: StaticMate[] = await StaticMate.findAll({
-      where: getAllStaticMates, //static_name, raid_member_role
-      
+      where: getAllStaticMates,  //static_name, raid_member_role
       order: [["id", "asc"]],
     });
     res.status(200).json({
@@ -55,9 +54,9 @@ export const findSingleStaticMate = async (
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
+    const getSingleStaticMember = req.query;
     console.log("Calling find one Static Mates");
     const { id }: { id: number } = req.params;
-
     const find_single_static_mate: StaticMate = await StaticMate.findOne(
       {
         where: {
@@ -99,6 +98,20 @@ export const createSingleStaticMate = async (
 ): Promise<StaticMateServiceReturn> => {
   try {
     //properties on the query object and the query object is property on the request object
+    const createSingleStaticMate = req.query;
+    const default_fields: string[] = Object.keys(createSingleStaticMate);
+    const REQUIRED_STATIC_MATE_FIELDS: string[] =[
+      'name',
+      'role'
+    ];
+    const missingFields: string [] = difference(REQUIRED_STATIC_MATE_FIELDS, default_fields);
+    if (missingFields.length ! == 0){
+      return{
+        status: 'Error',
+        data: 'Missing required fields:' 
+      }
+    };
+
     const createStaticMatePayload: createStaticMatePayload = req.body;
     console.log("req.body", req.body);
 
@@ -141,6 +154,7 @@ export const updateStaticMate = async (
   try {
     //do a find first to see if that thing exist
     //also ends things early
+    const updateStaticMate = req.query;
     const { id }: { id: number } = req.params;
     const updateStaticMateInfo: updateStaticMatePayload = req.body;
     console.log("req.body is reading:", updateStaticMateInfo);
@@ -188,6 +202,7 @@ export const deleteStaticMate = async (
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
+    const deleteStaticMate = req.query;
     const { id }: { id: string } = req.params;
     const delete_static_mate: number = await StaticMate.destroy({
       where: {
