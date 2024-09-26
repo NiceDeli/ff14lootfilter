@@ -28,6 +28,7 @@
   },
   "type": "module",
   "devDependencies": {
+    "@types/lodash": "^4.17.9",
     "@types/node": "^22.5.0",
     "nodemon": "^3.1.4",
     "sequelize-cli": "^6.6.2",

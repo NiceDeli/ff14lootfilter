@@ -45,7 +45,7 @@ export const getAllFloor = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const getFloor = async (
-  req: Request<{ id: number }>,
+  req: Request<{ id: number }, {}, {}, createFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
@@ -83,12 +83,11 @@ export const getFloor = async (
 };
 
 export const createSingleFloor = async (
-  req: Request<createFloorPayload>,
+  req: Request<{},createFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
     //properties on the query object and the query object is property on the request object
-    const createSingleFloor = req.query;
     const createFloorPayload: createFloorPayload = req.body;
     console.log("req.body", req.body);
     //find a single pesron
@@ -124,13 +123,12 @@ export const createSingleFloor = async (
 
 /////Update
 export const updateFloor = async (
-  req: Request<{ id: number }, any, updateFloorPayload>,
+  req: Request<{ id: number }, updateFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
     //do a find first to see if that thing exist
     //also ends things early
-    const updateFloor = req.query;
     const { id }: { id: number } = req.params;
     const updateFloorInfo: updateFloorPayload = req.body;
     console.log("req.body is reading", updateFloorInfo);
@@ -174,11 +172,10 @@ export const updateFloor = async (
 
 ///////Delete
 export const deleteRaidFloor = async (
-  req: Request<{ id: number }>,
+  req: Request<{ id: number }, {},{}, deleteFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
-    const deleteSingleFloor = req.query;
     const { id }: { id: number } = req.params;
     const delete_single_raid_floor: number = await Floor.destroy({
       where: {

@@ -45,7 +45,7 @@ export const findAllLootTable = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const findSingleLootTable = async (
-  req: Request<{ id: number }>, //You should build scalability with queries in the future, this is good for now though
+  req: Request<{ id: number }, {}, {}, createPayload>, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<LootTableServiceReturn> => {
   const findSingleLoot = req.query;
@@ -85,7 +85,7 @@ export const findSingleLootTable = async (
 ///create
 
 export const createSingleLootTable = async (
-  req: Request<createPayload>,
+  req: Request<{},createPayload>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
@@ -172,7 +172,7 @@ export const updateLootTable = async (
 
 ///////Delete
 export const deleteLootTable = async (
-  req: Request<{ id: number }>,
+  req: Request<{ id: number },{},{}, deleteLootTablePayload>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
