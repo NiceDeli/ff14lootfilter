@@ -118,12 +118,35 @@ export const createSingleStaticMate = async (
       REQUIRED_STATIC_MATE_FIELDS,
       default_fields
     );
-    if (missingFields.length! == 0) {
+    console.log(missingFields)
+    if (missingFields.length !== 0) {
+      res.status(400).json({
+        message: {
+          status: "Error",
+          data: "Error Missing Required Fields",
+        },
+      });
+
       return {
         status: "Error",
         data: "Missing required fields:",
       };
     }
+
+    if(default_fields.length !== REQUIRED_STATIC_MATE_FIELDS.length) {
+      res.status(400).json({
+        message: {
+          status: "Error",
+          data: "Extra Fields added to Post Body",
+        },
+      });
+
+      return {
+        status: "Error",
+        data: "Extra Fields added to Post Body",
+      };
+    }
+
     //properties on the query object and the query object is property on the request object
     const createStaticMatePayload: createStaticMatePayload = req.body;
     console.log("req.body", req.body);
