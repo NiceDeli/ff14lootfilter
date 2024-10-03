@@ -1,4 +1,5 @@
 import { LootTable } from "../../models/loot_table.model";
+import { WhereOptions } from "sequelize";
 
 export interface createPayload {
     piece_type: string;
@@ -21,7 +22,7 @@ export interface updateLootTablePayload {
     iLvl?: number;
 }
 
-export interface findLootTablePayload {
+export type findLootTablePayload = WhereOptions<LootTable> &{
     piece_type?: string;
     name_of_gear?: string;
     floor_id?: number;

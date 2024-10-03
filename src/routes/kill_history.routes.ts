@@ -14,7 +14,7 @@ Kill_History_Router.get("/SingleKillHistory", getSingleKillHistory);
 Kill_History_Router.post("/CreateSingleKillHistory", createSingleKillHistory);
 
 //PUT METHODS:
-Kill_History_Router.put("/UpdateSingleKillHistory", updateKillHistory);
+Kill_History_Router.put("/UpdateSingleKillHistory/:id", updateKillHistory);
 
 //Delete METHODS:
-Kill_History_Router.delete("/DeleteSingleKillHistory", deleteKillHistory);
+Kill_History_Router.delete("/DeleteSingleKillHistory/:id", deleteKillHistory);

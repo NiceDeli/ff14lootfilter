@@ -9,15 +9,15 @@ import {
   deleteDesirableLootPayload,
 } from "./types/desirable_loot_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
+import { WhereOptions } from "sequelize";
 
 ///////Read or Pull all
-//need to add promises
 export const findAllDesirableLoot = async (
-  req: Request,
+  req: Request<{ id: number }, {}, {}, findDesirableLootPayload>,
   res: Response
 ): Promise<DesirableLootServiceReturn> => {
   try {
-    const getAllDesirableLoot = req.query;
+    const getAllDesirableLoot: findDesirableLootPayload = req.query;
     console.log("Calling find all desirable loot");
     const allDesirableLoot: DesirableLoot[] = await DesirableLoot.findAll({
       where: getAllDesirableLoot,
@@ -44,15 +44,14 @@ export const findAllDesirableLoot = async (
   }
 };
 
-export const findDesirableLootTable = async (
-  req: Request<{ id: number }, {}, {}, createDesirableLootPayload>, //You should build scalability with queries in the future, this is good for now though
+export const findSingleDesirableLoot = async (
+  req: Request<{ id: number }, {}, {}, findDesirableLootPayload>, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<DesirableLootServiceReturn> => {
-  const findSingleDesirableLoot = req.query;
+  const findSingleDesirableLoot: findDesirableLootPayload = req.query;
   try {
     console.log("Calling find a single loot from loot_table");
     const { id }: { id: number } = req.params;
-
     const findSingleDesirableLoot: DesirableLoot = await DesirableLoot.findOne({
       where: {
         id: id,
@@ -136,7 +135,7 @@ export const createSingleDesirableLoot = async (
     const single_desirable_loot: DesirableLoot = await DesirableLoot.create({
       static_mate_id: createSingleDesirableLoot.static_mate_id,
       loot_table_id: createSingleDesirableLoot.loot_table_id,
-      date_obtained: createSingleDesirableLoot.date_obtained
+      date_obtained: createSingleDesirableLoot.date_obtained,
     });
     //this is confirming that things worked
     res.status(200).json({
@@ -169,8 +168,10 @@ export const updateDesirableLoot = async (
 ): Promise<DesirableLootServiceReturn> => {
   try {
     const updateDesirableLootInfo: updateDesirableLootPayload = req.body;
-    const Desirable_Loot_Keys: string[] = Object.keys(DesirableLoot.getAttributes());
-    const getAllDesirableLoot = req.body; //json object
+    const Desirable_Loot_Keys: string[] = Object.keys(
+      DesirableLoot.getAttributes()
+    );
+    const getAllDesirableLoot:findDesirableLootPayload = req.body; //json object
     for (const key in getAllDesirableLoot) {
       if (!Desirable_Loot_Keys.includes(key)) {
         res.status(400).json({
@@ -222,7 +223,7 @@ export const updateDesirableLoot = async (
 
 ///////Delete
 export const deleteDesirableLoot = async (
-  req: Request<{ id: number }, {}, {}, deleteDesirableLootPayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<DesirableLootServiceReturn> => {
   try {
@@ -254,7 +255,3 @@ export const deleteDesirableLoot = async (
     };
   }
 };
-
-// //createSingleLootTable({params: {gear_piece: "bracelet", gear_name:"Light-heavyweight raid ", floor_level: "m1s", source_of_gear: "Raid", itemLvl:730}}, {});
-// //updateLootTable({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {})
-// //the second half is the response so you can chain controllers to each other the second object is also a res

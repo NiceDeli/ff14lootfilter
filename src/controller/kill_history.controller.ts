@@ -1,7 +1,6 @@
 import pkg, { create } from "lodash";
 const { difference } = pkg;
 import { KillHistory } from "../models/kill_history.model.js";
-import { UpdatedAt } from "sequelize-typescript";
 import {
   createKillHistoryPayload,
   KillHistoryServiceReturn,
@@ -11,14 +10,15 @@ import {
 } from "./types/kill_history_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
 import { errorMonitor } from "stream";
+import { findDesirableLootPayload } from "./types/desirable_loot_types.js";
 
 ///////Read or Pull all
 export const getAllKillHistory = async (
-  req: Request,
+  req: Request<{ id: number }, {}, {}, findKillHistoryPayload>,
   res: Response
 ): Promise<KillHistoryServiceReturn> => {
   try {
-    const getAllKillHistory = req.query;
+    const getAllKillHistory: findKillHistoryPayload = req.query;
     console.log("Calling find all for Loot on the Table");
     const allKillHistory: KillHistory[] = await KillHistory.findAll({
       where: getAllKillHistory,
@@ -48,12 +48,12 @@ export const getAllKillHistory = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const getSingleKillHistory = async (
-  req: Request<{ id: number }, {}, {}, createKillHistoryPayload>,
+  req: Request<{ id: number }, {}, {}, findKillHistoryPayload>,
   res: Response
 ): Promise<KillHistoryServiceReturn> => {
   try {
     console.log("Calling find a single KillHistory from KillHistory");
-    const getSingleRaidKillHistory = req.query;
+    const getSingleRaidKillHistory: findKillHistoryPayload = req.query;
     const { id }: { id: number } = req.params;
     const getSingleKillHistory: KillHistory = await KillHistory.findOne({
       where: {
@@ -92,10 +92,7 @@ export const createSingleKillHistory = async (
     const createSingleKillHistory: createKillHistoryPayload = req.body;
     console.log("calling createSingleKillHistory");
     const default_fields: string[] = Object.keys(createSingleKillHistory);
-    const REQUIRED_KILL_HISTORY_FIELDS: string[] = [
-      "floor_id",
-      "date_killed",
-    ];
+    const REQUIRED_KILL_HISTORY_FIELDS: string[] = ["floor_id", "date_killed"];
     const missingFields: string[] = difference(
       REQUIRED_KILL_HISTORY_FIELDS,
       default_fields
@@ -168,9 +165,11 @@ export const updateKillHistory = async (
 ): Promise<KillHistoryServiceReturn> => {
   try {
     const updateKillHistoryInfo: updateKillHistoryPayload = req.body;
-    const Kill_History_Keys: string[] = Object.keys(KillHistory.getAttributes());
-    const getAllRaidKillHistorys = req.body;
-    for (const key in getAllRaidKillHistorys) {
+    const Kill_History_Keys: string[] = Object.keys(
+      KillHistory.getAttributes()
+    );
+    const getAllRaidKillHistory:findDesirableLootPayload = req.body;
+    for (const key in getAllRaidKillHistory) {
       if (!Kill_History_Keys.includes(key)) {
         res.status(400).json({
           status: "Error",
@@ -178,7 +177,7 @@ export const updateKillHistory = async (
         });
         return {
           status: "Error",
-          data: "Invalid Field",
+          data: "Invalid Field" + key,
         };
       }
     }
@@ -186,15 +185,13 @@ export const updateKillHistory = async (
     const { id }: { id: number } = req.body;
     console.log("req.body is reading", updateKillHistoryInfo);
 
-    const [affectedCount, affectedRows]: [number, KillHistory[]] = await KillHistory.update(
-      updateKillHistoryInfo,
-      {
+    const [affectedCount, affectedRows]: [number, KillHistory[]] =
+      await KillHistory.update(updateKillHistoryInfo, {
         where: {
           id: id,
         },
         returning: true,
-      }
-    );
+      });
 
     //POSTMAN GETS THIS
     res.status(200).json({
@@ -223,7 +220,7 @@ export const updateKillHistory = async (
 
 ///////Delete
 export const deleteKillHistory = async (
-  req: Request<{ id: number }, {}, {}, deleteKillHistoryPayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<KillHistoryServiceReturn> => {
   try {

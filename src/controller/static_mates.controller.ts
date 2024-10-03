@@ -10,49 +10,15 @@ import {
 } from "./types/static_mate_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
 import { errorMonitor } from "stream";
-import { deleteFloorPayload } from "./types/raid_floor_types.js";
 
 ///////Read or Pull all
 export const findAllStaticMates = async (
-  req: Request,
+  req: Request<{ id: number }, {}, {}, findStaticMatePayload>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
     //finaAllStaticMates = static_name, raid_member_role
-    const getAllStaticMates = req.query;
-    const default_fields: string[] = Object.keys(findAllStaticMates);
-    const REQUIRED_STATIC_MATE_FIELDS: string[] = ["name", "role"];
-    const missingFields: string[] = difference(
-      REQUIRED_STATIC_MATE_FIELDS,
-      default_fields
-    );
-    if (missingFields.length !== 0) {
-      res.status(400).json({
-        message: {
-          status: "Error",
-          data: "Missing required fields",
-        },
-      });
-      return {
-        status: "Error",
-        data: "Missing required fields:",
-      };
-    }
-
-    if (default_fields.length !== REQUIRED_STATIC_MATE_FIELDS.length) {
-      res.status(400).json({
-        message: {
-          status: "Error",
-          data: "Extra Fields added to Post Body",
-        },
-      });
-
-      return {
-        status: "Error",
-        data: "Extra Fields added to Post Body",
-      };
-    }
-
+    const getAllStaticMates: findStaticMatePayload = req.query;
     console.log("Calling find all for Static Mates");
     const getStaticMates: StaticMate[] = await StaticMate.findAll({
       where: getAllStaticMates, //static_name, raid_member_role
@@ -85,12 +51,11 @@ export const findAllStaticMates = async (
 
 //Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const findSingleStaticMate = async (
-  req: Request<{ id: number }, {}, {}, createStaticMatePayload>,
+  req: Request<{ id: number }, {}, {}, findStaticMatePayload>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
-    //finaAllStaticMates = static_name, raid_member_role
-    const getAllStaticMates = req.query;
+    const getAllStaticMates: findStaticMatePayload = req.query;
     console.log("Calling find one Static Mates");
     const { id }: { id: number } = req.params;
     const find_single_static_mate: StaticMate = await StaticMate.findOne({
@@ -122,8 +87,8 @@ export const findSingleStaticMate = async (
   }
 };
 
-///create
 
+///create
 //adding object to createSingleStaticMate is acting weird
 export const createSingleStaticMate = async (
   req: Request<{}, createStaticMatePayload>,
@@ -131,10 +96,11 @@ export const createSingleStaticMate = async (
 ): Promise<StaticMateServiceReturn> => {
   try {
     const createSingleStaticMate: createStaticMatePayload = req.body;
-    console.log("calling createSingleStaticMate");
     const default_fields: string[] = Object.keys(createSingleStaticMate);
     console.log(default_fields);
-    const REQUIRED_STATIC_MATE_FIELDS: string[] = ["name", "role"];
+    const REQUIRED_STATIC_MATE_FIELDS: string[] = [
+      "name", 
+      "role"];
     const missingFields: string[] = difference(
       REQUIRED_STATIC_MATE_FIELDS,
       default_fields
@@ -171,7 +137,7 @@ export const createSingleStaticMate = async (
     }
 
     //properties on the query object and the query object is property on the request object
-   
+
     console.log("req.body", req.body);
 
     const single_static_mate: StaticMate = await StaticMate.create({
@@ -212,7 +178,7 @@ export const updateStaticMate = async (
   try {
     const updateStaticMateInfo: updateStaticMatePayload = req.body;
     const Static_Mate_Keys: string[] = Object.keys(StaticMate.getAttributes());
-    const getAllStaticMates = req.body; //json object calling the body we are giving (name and role)
+    const getAllStaticMates: findStaticMatePayload = req.body; //json object calling the body we are giving (name and role)
     for (const key in getAllStaticMates) {
       if (!Static_Mate_Keys.includes(key)) {
         res.status(400).json({
@@ -266,12 +232,12 @@ export const updateStaticMate = async (
 ///////Delete
 //export const deleteStaticMate = async (req: Request<(id: string), any, deleteStaticMatePayload>, res:Response): Promise<StaticMateServiceReturn> => {
 export const deleteStaticMate = async (
-  req: Request<{ id: string }, {}, {}, deleteStaticMatePayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
     //finaAllStaticMates = static_name, raid_member_role
-    const { id }: { id: string } = req.params;
+    const { id }: { id: number} = req.params;
     const delete_static_mate: number = await StaticMate.destroy({
       where: {
         id: id,

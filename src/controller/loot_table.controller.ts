@@ -13,11 +13,11 @@ import { Request, Response } from "express"; // Make sure you are importing from
 ///////Read or Pull all
 //need to add promises
 export const findAllLootTable = async (
-  req: Request,
+  req: Request<{ id: number }, {}, {}, findLootTablePayload>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {
-    const getAllLoot = req.query;
+    const getAllLoot: findLootTablePayload = req.query;
     console.log("Calling find all for Loot on the Table");
     const allLootTables: LootTable[] = await LootTable.findAll({
       where: getAllLoot,
@@ -46,14 +46,13 @@ export const findAllLootTable = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const findSingleLootTable = async (
-  req: Request<{ id: number }, {}, {}, createPayload>, //You should build scalability with queries in the future, this is good for now though
+  req: Request<{ id: number }, {}, {}, findLootTablePayload>, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<LootTableServiceReturn> => {
-  const findSingleLoot = req.query;
+  const findSingleLoot: findLootTablePayload = req.query;
   try {
     console.log("Calling find a single loot from loot_table");
     const { id }: { id: number } = req.params;
-
     const findSingleLootTable: LootTable = await LootTable.findOne({
       where: {
         id: id,
@@ -175,7 +174,7 @@ export const updateLootTable = async (
   try {
     const updateLootTableInfo: updateLootTablePayload = req.body;
     const Loot_Table_Keys: string[] = Object.keys(LootTable.getAttributes());
-    const getAllLootTable = req.body; //json object
+    const getAllLootTable:findLootTablePayload = req.body; //json object
     for (const key in getAllLootTable) {
       if (!Loot_Table_Keys.includes(key)) {
         res.status(400).json({
@@ -227,7 +226,7 @@ export const updateLootTable = async (
 
 ///////Delete
 export const deleteLootTable = async (
-  req: Request<{ id: number }, {}, {}, deleteLootTablePayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<LootTableServiceReturn> => {
   try {

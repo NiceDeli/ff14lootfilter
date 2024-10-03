@@ -1,4 +1,5 @@
 import { Floor } from "../../models/floor.model";
+import { WhereOptions } from "sequelize";
 
 export interface createFloorPayload {
   floor_abbreviation: string;
@@ -15,7 +16,7 @@ export interface updateFloorPayload {
   floor_name?: string;
 }
 
-export interface findFloorPayload {
+export type findFloorPayload = WhereOptions<Floor> &  {
   floor_abbreviation?: string;
   floor_name?: string;
 }

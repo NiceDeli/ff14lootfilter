@@ -1,4 +1,5 @@
 import { DesirableLoot } from "../../models/desirable_loot.model";
+import { WhereOptions } from "sequelize";
 
 export interface createDesirableLootPayload {
     static_mate_id: number;
@@ -11,7 +12,7 @@ export interface DesirableLootServiceReturn {
   data: string | DesirableLoot | DesirableLoot[] | number;
 }
 
-export interface findDesirableLootPayload {
+export type findDesirableLootPayload = WhereOptions<DesirableLoot> &{
     static_mate_id: number;
     loot_table_id: number;
     date_obtained: Date;
@@ -31,8 +32,3 @@ export interface deleteDesirableLootPayload {
     id?: number;
 }
 
-export interface findDesirableLootPayload {
-    static_mate_id: number;
-    loot_table_id: number;
-    date_obtained: Date;
-}

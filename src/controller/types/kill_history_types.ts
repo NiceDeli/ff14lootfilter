@@ -1,4 +1,6 @@
+import { WhereOptions } from "sequelize";
 import { KillHistory } from "../../models/kill_history.model";
+
 
 export interface createKillHistoryPayload {
     floor_id: number;
@@ -10,7 +12,7 @@ export interface KillHistoryServiceReturn {
   data: string | KillHistory | KillHistory[] | number;
 }
 
-export interface findKillHistoryPayload {
+export type findKillHistoryPayload = WhereOptions<KillHistory> & {
     floor_id: number;
     date_killed: Date;
 }
@@ -25,7 +27,3 @@ export interface deleteKillHistoryPayload {
     date_killed: Date;
 }
 
-export interface findKillHistoryPayload {
-    floor_id: number;
-    date_killed: Date;
-}

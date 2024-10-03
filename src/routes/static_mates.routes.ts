@@ -7,7 +7,7 @@ export const Static_Mates_Router = express.Router();
 
 // //GET METHODS:
 Static_Mates_Router.get("/AllStaticMates",findAllStaticMates);
-Static_Mates_Router.get("/findSingleStaticMate", findSingleStaticMate);
+Static_Mates_Router.get("/findSingleStaticMate/:id", findSingleStaticMate);
 //POST METHODS:
 Static_Mates_Router.post("/createSingleStaticMate", createSingleStaticMate);
 
@@ -15,4 +15,4 @@ Static_Mates_Router.post("/createSingleStaticMate", createSingleStaticMate);
 Static_Mates_Router.put("/updateStaticMember", updateStaticMate);
 
 //Delete METHODS:
-Static_Mates_Router.delete("/:id", deleteStaticMate);
+Static_Mates_Router.delete("deleteStaticMember/:id", deleteStaticMate);

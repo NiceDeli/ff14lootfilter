@@ -41,7 +41,7 @@ const sequelize:Sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
 });
 
 // Function to define associations after models are initialized
-export const defineAssociations = () => {
+export const defineAssociations = async ():Promise<void> => {
   //foriegn keys for loot_table
   LootTable.belongsTo(Floor, { foreignKey: 'floor_id' });
   Floor.hasMany(LootTable, { foreignKey: 'floor_id' });

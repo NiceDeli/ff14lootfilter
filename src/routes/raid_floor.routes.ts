@@ -9,10 +9,10 @@ export const Floor_Router = express.Router();
 Floor_Router.get("/AllFloor", getAllFloor);
 
 //POST METHODS:
-Floor_Router.post("/CreateSingleFloor", createSingleFloor);
+Floor_Router.post("/CreateSingleFloor/:id", createSingleFloor);
 
 //PUT METHODS:
-Floor_Router.put("/UpdateSingleFloor", updateFloor);
+Floor_Router.put("/UpdateSingleFloor/:id", updateFloor);
 
 //Delete METHODS:
-//Floor_Router.delete("/DeleteSingleItem", deleteFloor);
+//Floor_Router.delete("/DeleteSingleItem/:id", deleteFloor);

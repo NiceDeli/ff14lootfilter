@@ -14,11 +14,11 @@ import { errorMonitor } from "stream";
 
 ///////Read or Pull all
 export const getAllFloor = async (
-  req: Request,
+  req: Request<{ id: number }, {}, {}, findFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
-    const getAllFloor = req.query;
+    const getAllFloor: findFloorPayload = req.query;
     console.log("Calling find all for Loot on the Table");
     const allFloor: Floor[] = await Floor.findAll({
       where: getAllFloor,
@@ -48,12 +48,12 @@ export const getAllFloor = async (
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
 export const getFloor = async (
-  req: Request<{ id: number }, {}, {}, createFloorPayload>,
+  req: Request<{ id: number }, {}, {}, findFloorPayload>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
     console.log("Calling find a single floor from raid_floor");
-    const getSingleRaidFloor = req.query;
+    const getSingleRaidFloor:findFloorPayload = req.query;
     const { id }: { id: number } = req.params;
     const getSingleFloor: Floor = await Floor.findOne({
       where: {
@@ -90,7 +90,6 @@ export const createSingleFloor = async (
 ): Promise<FloorServiceReturn> => {
   try {
     const createSingleFloor: createFloorPayload = req.body;
-    //finaAllStaticMates = static_name, raid_member_role
     console.log("calling createSingleFloor");
     const default_fields: string[] = Object.keys(createSingleFloor);
     const REQUIRED_RAID_FLOOR_FIELDS: string[] = [
@@ -170,7 +169,7 @@ export const updateFloor = async (
   try {
     const updateFloorInfo: updateFloorPayload = req.body;
     const Raid_Floor_Keys: string[] = Object.keys(Floor.getAttributes());
-    const getAllRaidFloors = req.body;
+    const getAllRaidFloors: findFloorPayload = req.body;
     for (const key in getAllRaidFloors) {
       if (!Raid_Floor_Keys.includes(key)) {
         res.status(400).json({
@@ -224,7 +223,7 @@ export const updateFloor = async (
 
 ///////Delete
 export const deleteRaidFloor = async (
-  req: Request<{ id: number }, {}, {}, deleteFloorPayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<FloorServiceReturn> => {
   try {
@@ -255,6 +254,3 @@ export const deleteRaidFloor = async (
   }
 };
 
-//createSingleLootTable({params: {gear_piece: "bracelet", gear_name:"Light-heavyweight raid ", floor_level: "m1s", source_of_gear: "Raid", itemLvl:730}}, {});
-//updateLootTable({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {})
-//the second half is the response so you can chain controllers to each other the second object is also a res

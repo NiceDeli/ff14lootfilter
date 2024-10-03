@@ -12,7 +12,6 @@ import { Request, Response } from "express"; // Make sure you are importing from
 import { WhereOptions } from "sequelize";
 
 ///////Read or Pull all
-//need to add promises
 export const getAllCurrentLoot = async (
   req: Request<{ id: number }, {}, {}, findCurrentLootPayload>,
   res: Response
@@ -46,14 +45,13 @@ export const getAllCurrentLoot = async (
 };
 
 export const getSingleCurrentLoot = async (
-  req: Request<{ id: number }, {}, {}, createCurrentLootPayload>, //You should build scalability with queries in the future, this is good for now though
+  req: Request<{ id: number }, {}, {}, findCurrentLootPayload>, //You should build scalability with queries in the future, this is good for now though
   res: Response
 ): Promise<CurrentLootServiceReturn> => {
-  const findSingleLoot = req.query;
+  const findCurrentSingleLoot: findCurrentLootPayload = req.query;
   try {
     console.log("Calling find a single loot from loot_table");
     const { id }: { id: number } = req.params;
-
     const findSingleCurrentLoot: CurrentLoot = await CurrentLoot.findOne({
       where: {
         id: id,
@@ -72,7 +70,7 @@ export const getSingleCurrentLoot = async (
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      status: "Faliure",
+      status: "Failure",
       data: "Error trying to find Loot" + error,
     });
 
@@ -91,16 +89,16 @@ export const createSingleCurrentLoot = async (
   try {
     const createSingleCurrentLoot: createCurrentLootPayload = req.body;
     const default_fields: string[] = Object.keys(createSingleCurrentLoot);
-    const REQUIRED_current_loot_FIELDS: string[] = [
+    const REQUIRED_CURRENT_LOOT_FIELDS: string[] = [
       "static_mate_id",
       "loot_table_id",
     ];
     const missingFields: string[] = difference(
-      REQUIRED_current_loot_FIELDS,
+      REQUIRED_CURRENT_LOOT_FIELDS,
       default_fields
     );
     console.log(default_fields),
-      console.log(REQUIRED_current_loot_FIELDS),
+      console.log(REQUIRED_CURRENT_LOOT_FIELDS),
       console.log(missingFields);
     if (missingFields.length !== 0) {
       res.status(400).json({
@@ -115,7 +113,7 @@ export const createSingleCurrentLoot = async (
       };
     }
 
-    if (default_fields.length !== REQUIRED_current_loot_FIELDS.length) {
+    if (default_fields.length !== REQUIRED_CURRENT_LOOT_FIELDS.length) {
       res.status(400).json({
         message: {
           status: "Error",
@@ -168,8 +166,10 @@ export const updateCurrentLoot = async (
 ): Promise<CurrentLootServiceReturn> => {
   try {
     const updateCurrentLootInfo: updateCurrentLootPayload = req.body;
-    const current_loot_Keys: string[] = Object.keys(CurrentLoot.getAttributes());
-    const getAllCurrentLoot = req.body; //json object
+    const current_loot_Keys: string[] = Object.keys(
+      CurrentLoot.getAttributes()
+    );
+    const getAllCurrentLoot:findCurrentLootPayload = req.body; //json object
     for (const key in getAllCurrentLoot) {
       if (!current_loot_Keys.includes(key)) {
         res.status(400).json({
@@ -221,7 +221,7 @@ export const updateCurrentLoot = async (
 
 ///////Delete
 export const deleteCurrentLoot = async (
-  req: Request<{ id: number }, {}, {}, deleteCurrentLootPayload>,
+  req: Request<{ id: number }>,
   res: Response
 ): Promise<CurrentLootServiceReturn> => {
   try {

@@ -1,4 +1,5 @@
 import { StaticMate } from "../../models/static_mates.model";
+import { WhereOptions } from "sequelize";
 
 export interface createStaticMatePayload {
   name: string;
@@ -10,7 +11,7 @@ export interface StaticMateServiceReturn {
   data: string | StaticMate | StaticMate[] | number;
 }
 
-export interface findStaticMatePayload {
+export type findStaticMatePayload = WhereOptions<StaticMate> & {
   name?: string;
   role?: string;
 }
