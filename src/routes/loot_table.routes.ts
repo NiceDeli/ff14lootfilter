@@ -8,13 +8,13 @@ export const Loot_Table_Router = express.Router();
 
 // //GET METHODS:
 Loot_Table_Router.get("/AllLoot", findAllLootTable);
-Loot_Table_Router.get("/SingleLoot", findSingleLootTable);
+Loot_Table_Router.get("/SingleLoot/:id", findSingleLootTable);
 
 //POST METHODS:
 Loot_Table_Router.post("/CreateSingleItem", createSingleLootTable);
 
 //PUT METHODS:
-Loot_Table_Router.put("/UpdateSingleItem:id", updateLootTable);
+Loot_Table_Router.put("/UpdateSingleItem/:id", updateLootTable);
 
 //Delete METHODS:
-Loot_Table_Router.delete("/DeleteSingleItem:id", deleteLootTable);
+Loot_Table_Router.delete("/DeleteSingleItem/:id", deleteLootTable);

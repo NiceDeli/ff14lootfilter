@@ -12,7 +12,7 @@ Floor_Router.get("/AllFloor", getAllFloor);
 Floor_Router.post("/CreateSingleFloor", createSingleFloor);
 
 //PUT METHODS:
-Floor_Router.put("/UpdateSingleFloor/:id", updateFloor);
+Floor_Router.put("/UpdateSingleFloor", updateFloor);
 
 //Delete METHODS:
 //Floor_Router.delete("/DeleteSingleItem", deleteFloor);

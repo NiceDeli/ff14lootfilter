@@ -1,37 +1,37 @@
-import pkg from "lodash";
+import pkg, { create } from "lodash";
 const { difference } = pkg;
+import { KillHistory } from "../models/kill_history.model.js";
 import { UpdatedAt } from "sequelize-typescript";
-import { Floor } from "../models/floor.model.js";
 import {
-  createFloorPayload,
-  FloorServiceReturn,
-  updateFloorPayload,
-  findFloorPayload,
-  deleteFloorPayload,
-} from "./types/raid_floor_types.js";
+  createKillHistoryPayload,
+  KillHistoryServiceReturn,
+  updateKillHistoryPayload,
+  findKillHistoryPayload,
+  deleteKillHistoryPayload,
+} from "./types/kill_history_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
 import { errorMonitor } from "stream";
 
 ///////Read or Pull all
-export const getAllFloor = async (
+export const getAllKillHistory = async (
   req: Request,
   res: Response
-): Promise<FloorServiceReturn> => {
+): Promise<KillHistoryServiceReturn> => {
   try {
-    const getAllFloor = req.query;
+    const getAllKillHistory = req.query;
     console.log("Calling find all for Loot on the Table");
-    const allFloor: Floor[] = await Floor.findAll({
-      where: getAllFloor,
+    const allKillHistory: KillHistory[] = await KillHistory.findAll({
+      where: getAllKillHistory,
       order: [["id", "asc"]],
     });
     res.status(200).json({
       status: "Sucesss",
-      data: allFloor,
+      data: allKillHistory,
     });
 
     return {
       status: "Sucesss",
-      data: allFloor,
+      data: allKillHistory,
     };
   } catch (error) {
     res.status(500).json({
@@ -47,15 +47,15 @@ export const getAllFloor = async (
 };
 
 // Pull a SINGLE PERSON NEEDS TO BE FIXED
-export const getFloor = async (
-  req: Request<{ id: number }, {}, {}, createFloorPayload>,
+export const getSingleKillHistory = async (
+  req: Request<{ id: number }, {}, {}, createKillHistoryPayload>,
   res: Response
-): Promise<FloorServiceReturn> => {
+): Promise<KillHistoryServiceReturn> => {
   try {
-    console.log("Calling find a single floor from raid_floor");
-    const getSingleRaidFloor = req.query;
+    console.log("Calling find a single KillHistory from KillHistory");
+    const getSingleRaidKillHistory = req.query;
     const { id }: { id: number } = req.params;
-    const getSingleFloor: Floor = await Floor.findOne({
+    const getSingleKillHistory: KillHistory = await KillHistory.findOne({
       where: {
         id: id,
       },
@@ -63,12 +63,12 @@ export const getFloor = async (
 
     res.status(200).json({
       status: "Success",
-      data: getSingleFloor,
+      data: getSingleKillHistory,
     });
 
     return {
       status: "Success",
-      data: getSingleFloor,
+      data: getSingleKillHistory,
     };
   } catch (error) {
     console.error(error);
@@ -84,21 +84,20 @@ export const getFloor = async (
   }
 };
 
-export const createSingleFloor = async (
-  req: Request<{}, createFloorPayload>,
+export const createSingleKillHistory = async (
+  req: Request<{}, createKillHistoryPayload>,
   res: Response
-): Promise<FloorServiceReturn> => {
+): Promise<KillHistoryServiceReturn> => {
   try {
-    const createSingleFloor: createFloorPayload = req.body;
-    //finaAllStaticMates = static_name, raid_member_role
-    console.log("calling createSingleFloor");
-    const default_fields: string[] = Object.keys(createSingleFloor);
-    const REQUIRED_RAID_FLOOR_FIELDS: string[] = [
-      "floor_abbreviation",
-      "floor_name",
+    const createSingleKillHistory: createKillHistoryPayload = req.body;
+    console.log("calling createSingleKillHistory");
+    const default_fields: string[] = Object.keys(createSingleKillHistory);
+    const REQUIRED_KILL_HISTORY_FIELDS: string[] = [
+      "floor_id",
+      "date_killed",
     ];
     const missingFields: string[] = difference(
-      REQUIRED_RAID_FLOOR_FIELDS,
+      REQUIRED_KILL_HISTORY_FIELDS,
       default_fields
     );
     if (missingFields.length !== 0) {
@@ -115,7 +114,7 @@ export const createSingleFloor = async (
       };
     }
 
-    if (default_fields.length !== REQUIRED_RAID_FLOOR_FIELDS.length) {
+    if (default_fields.length !== REQUIRED_KILL_HISTORY_FIELDS.length) {
       res.status(400).json({
         message: {
           status: "Error",
@@ -134,25 +133,25 @@ export const createSingleFloor = async (
     //find a single pesron
 
     //this is the set up of paramaters for postman
-    const new_floor: Floor = await Floor.create({
-      floor_abbreviation: createSingleFloor.floor_abbreviation,
-      floor_name: createSingleFloor.floor_name,
+    const single_kll_history: KillHistory = await KillHistory.create({
+      floor_id: createSingleKillHistory.floor_id,
+      date_killed: createSingleKillHistory.date_killed,
     });
     //this is confirming that things worked
     res.status(200).json({
       status: "Success",
-      data: new_floor,
+      data: single_kll_history,
     });
 
     return {
       status: "Sucess",
-      data: new_floor,
+      data: single_kll_history,
     };
   } catch (error) {
     console.error(error);
     res.status(500).json({
       status: "Error",
-      data: "Floor was unable to be made:" + error,
+      data: "KillHistory was unable to be made:" + error,
     });
 
     return {
@@ -163,16 +162,16 @@ export const createSingleFloor = async (
 };
 
 /////Update
-export const updateFloor = async (
-  req: Request<{ id: number }, updateFloorPayload>,
+export const updateKillHistory = async (
+  req: Request<{ id: number }, updateKillHistoryPayload>,
   res: Response
-): Promise<FloorServiceReturn> => {
+): Promise<KillHistoryServiceReturn> => {
   try {
-    const updateFloorInfo: updateFloorPayload = req.body;
-    const Raid_Floor_Keys: string[] = Object.keys(Floor.getAttributes());
-    const getAllRaidFloors = req.body;
-    for (const key in getAllRaidFloors) {
-      if (!Raid_Floor_Keys.includes(key)) {
+    const updateKillHistoryInfo: updateKillHistoryPayload = req.body;
+    const Kill_History_Keys: string[] = Object.keys(KillHistory.getAttributes());
+    const getAllRaidKillHistorys = req.body;
+    for (const key in getAllRaidKillHistorys) {
+      if (!Kill_History_Keys.includes(key)) {
         res.status(400).json({
           status: "Error",
           data: "Invalid Field: " + key,
@@ -185,10 +184,10 @@ export const updateFloor = async (
     }
 
     const { id }: { id: number } = req.body;
-    console.log("req.body is reading", updateFloorInfo);
+    console.log("req.body is reading", updateKillHistoryInfo);
 
-    const [affectedCount, affectedRows]: [number, Floor[]] = await Floor.update(
-      updateFloorInfo,
+    const [affectedCount, affectedRows]: [number, KillHistory[]] = await KillHistory.update(
+      updateKillHistoryInfo,
       {
         where: {
           id: id,
@@ -223,30 +222,30 @@ export const updateFloor = async (
 };
 
 ///////Delete
-export const deleteRaidFloor = async (
-  req: Request<{ id: number }, {}, {}, deleteFloorPayload>,
+export const deleteKillHistory = async (
+  req: Request<{ id: number }, {}, {}, deleteKillHistoryPayload>,
   res: Response
-): Promise<FloorServiceReturn> => {
+): Promise<KillHistoryServiceReturn> => {
   try {
     const { id }: { id: number } = req.params;
-    const delete_single_raid_floor: number = await Floor.destroy({
+    const delete_single_kill_history: number = await KillHistory.destroy({
       where: {
         id: id,
       },
     });
     res.status(200).json({
       status: "Sucess",
-      data: delete_single_raid_floor,
+      data: delete_single_kill_history,
     });
 
     return {
       status: "Sucess",
-      data: delete_single_raid_floor,
+      data: delete_single_kill_history,
     };
   } catch (error) {
     res.status(500).json({
       status: "Error",
-      data: "Floor was unable to be deleted:" + error,
+      data: "KillHistory was unable to be deleted:" + error,
     });
     return {
       status: "Error",
@@ -254,7 +253,3 @@ export const deleteRaidFloor = async (
     };
   }
 };
-
-//createSingleLootTable({params: {gear_piece: "bracelet", gear_name:"Light-heavyweight raid ", floor_level: "m1s", source_of_gear: "Raid", itemLvl:730}}, {});
-//updateLootTable({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {})
-//the second half is the response so you can chain controllers to each other the second object is also a res

@@ -3,6 +3,9 @@ import { Sequelize } from "sequelize-typescript";
 import { StaticMate } from "../models/static_mates.model.js";
 import { Floor } from "../models/floor.model.js";
 import { LootTable } from "../models/loot_table.model.js";
+import { DesirableLoot } from "../models/desirable_loot.model.js";
+import { KillHistory } from "../models/kill_history.model.js";
+import { CurrentLoot } from "../models/current_loot.model.js";
 
 dotenv.config(); // Load environment variables from .env
 
@@ -34,13 +37,32 @@ const sequelize:Sequelize = new Sequelize(process.env.SUPABASE_URI as string, {
       rejectUnauthorized: false, // Skip SSL certificate validation (adjust based on security needs)
     },
   },
-  models: [Floor, LootTable, StaticMate], // Register all models here
+  models: [Floor, LootTable, StaticMate, DesirableLoot, KillHistory, CurrentLoot ], // Register all models here
 });
 
 // Function to define associations after models are initialized
 export const defineAssociations = () => {
+  //foriegn keys for loot_table
   LootTable.belongsTo(Floor, { foreignKey: 'floor_id' });
   Floor.hasMany(LootTable, { foreignKey: 'floor_id' });
+  
+  //foreign keys for desirable_loot
+  DesirableLoot.belongsTo(LootTable, {foreignKey: 'loot_table_id'});
+  LootTable.hasMany(DesirableLoot, { foreignKey: 'loot_table_id' });
+
+  DesirableLoot.belongsTo(StaticMate, {foreignKey: 'static_mate_id'});
+  StaticMate.hasMany(DesirableLoot, {foreignKey: 'static_mate_id'});
+
+  //foriegn keys for kill_history
+  KillHistory.belongsTo(Floor, {foreignKey: 'floor_id'});
+  Floor.hasMany(KillHistory, { foreignKey: 'floor_id'});
+
+  //foriegn keys for current_loot
+  CurrentLoot.belongsTo(LootTable, {foreignKey: 'loot_table_id'});
+  LootTable.hasMany(CurrentLoot, { foreignKey: 'loot_table_id' });
+
+  CurrentLoot.belongsTo(StaticMate, {foreignKey: 'static_mate_id'});
+  StaticMate.hasMany(CurrentLoot, {foreignKey: 'static_mate_id'});
 };
 
 // Function to connect to the database

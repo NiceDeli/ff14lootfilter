@@ -26,12 +26,33 @@ export const findAllStaticMates = async (
       REQUIRED_STATIC_MATE_FIELDS,
       default_fields
     );
-    if (missingFields.length! == 0) {
+    if (missingFields.length !== 0) {
+      res.status(400).json({
+        message: {
+          status: "Error",
+          data: "Missing required fields",
+        },
+      });
       return {
         status: "Error",
         data: "Missing required fields:",
       };
     }
+
+    if (default_fields.length !== REQUIRED_STATIC_MATE_FIELDS.length) {
+      res.status(400).json({
+        message: {
+          status: "Error",
+          data: "Extra Fields added to Post Body",
+        },
+      });
+
+      return {
+        status: "Error",
+        data: "Extra Fields added to Post Body",
+      };
+    }
+
     console.log("Calling find all for Static Mates");
     const getStaticMates: StaticMate[] = await StaticMate.findAll({
       where: getAllStaticMates, //static_name, raid_member_role
@@ -68,8 +89,8 @@ export const findSingleStaticMate = async (
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
-
-
+    //finaAllStaticMates = static_name, raid_member_role
+    const getAllStaticMates = req.query;
     console.log("Calling find one Static Mates");
     const { id }: { id: number } = req.params;
     const find_single_static_mate: StaticMate = await StaticMate.findOne({
@@ -109,21 +130,23 @@ export const createSingleStaticMate = async (
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
-    //finaAllStaticMates = static_name, raid_member_role
-    console.log("calling createSingleStaticMate")
-    const default_fields: string[] = Object.keys(req.body);
-    console.log (default_fields);
+    const createSingleStaticMate: createStaticMatePayload = req.body;
+    console.log("calling createSingleStaticMate");
+    const default_fields: string[] = Object.keys(createSingleStaticMate);
+    console.log(default_fields);
     const REQUIRED_STATIC_MATE_FIELDS: string[] = ["name", "role"];
     const missingFields: string[] = difference(
       REQUIRED_STATIC_MATE_FIELDS,
       default_fields
     );
-    console.log(missingFields)
+    console.log(REQUIRED_STATIC_MATE_FIELDS);
+    console.log(default_fields);
+    console.log(missingFields);
     if (missingFields.length !== 0) {
       res.status(400).json({
         message: {
           status: "Error",
-          data: "Error Missing Required Fields",
+          data: "Error Missing Required Field",
         },
       });
 
@@ -133,7 +156,7 @@ export const createSingleStaticMate = async (
       };
     }
 
-    if(default_fields.length !== REQUIRED_STATIC_MATE_FIELDS.length) {
+    if (default_fields.length !== REQUIRED_STATIC_MATE_FIELDS.length) {
       res.status(400).json({
         message: {
           status: "Error",
@@ -148,12 +171,12 @@ export const createSingleStaticMate = async (
     }
 
     //properties on the query object and the query object is property on the request object
-    const createStaticMatePayload: createStaticMatePayload = req.body;
+   
     console.log("req.body", req.body);
 
     const single_static_mate: StaticMate = await StaticMate.create({
-      name: createStaticMatePayload.name,
-      role: createStaticMatePayload.role,
+      name: createSingleStaticMate.name,
+      role: createSingleStaticMate.role,
     });
 
     res.status(200).json({
@@ -187,23 +210,24 @@ export const updateStaticMate = async (
   res: Response
 ): Promise<StaticMateServiceReturn> => {
   try {
-    //finaAllStaticMates = static_name, raid_member_role
-    const default_fields: string[] = Object.keys(updateStaticMate);
-    const REQUIRED_STATIC_MATE_FIELDS: string[] = ["name", "role"];
-    const missingFields: string[] = difference(
-      REQUIRED_STATIC_MATE_FIELDS,
-      default_fields
-    );
-    if (missingFields.length! == 0) {
-      return {
-        status: "Error",
-        data: "Missing required fields:",
-      };
+    const updateStaticMateInfo: updateStaticMatePayload = req.body;
+    const Static_Mate_Keys: string[] = Object.keys(StaticMate.getAttributes());
+    const getAllStaticMates = req.body; //json object calling the body we are giving (name and role)
+    for (const key in getAllStaticMates) {
+      if (!Static_Mate_Keys.includes(key)) {
+        res.status(400).json({
+          status: "Error",
+          data: "Invalid Field: " + key,
+        });
+        return {
+          status: "Error",
+          data: "Invalid Field",
+        };
+      }
     }
     //do a find first to see if that thing exist
     //also ends things early
-    const { id }: { id: number } = req.params;
-    const updateStaticMateInfo: updateStaticMatePayload = req.body;
+    const { id }: { id: number } = req.body;
     console.log("req.body is reading:", updateStaticMateInfo);
     const [affectedCount, affectedRows]: [number, StaticMate[]] =
       await StaticMate.update(updateStaticMateInfo, {
@@ -247,18 +271,6 @@ export const deleteStaticMate = async (
 ): Promise<StaticMateServiceReturn> => {
   try {
     //finaAllStaticMates = static_name, raid_member_role
-    const default_fields: string[] = Object.keys(findSingleStaticMate);
-    const REQUIRED_STATIC_MATE_FIELDS: string[] = ["name", "role"];
-    const missingFields: string[] = difference(
-      REQUIRED_STATIC_MATE_FIELDS,
-      default_fields
-    );
-    if (missingFields.length! == 0) {
-      return {
-        status: "Error",
-        data: "Missing required fields:",
-      };
-    }
     const { id }: { id: string } = req.params;
     const delete_static_mate: number = await StaticMate.destroy({
       where: {
@@ -304,3 +316,4 @@ export const deleteStaticMate = async (
 //   }
 
 //   }
+

@@ -25,8 +25,3 @@ export interface deleteStaticMatePayload {
   name: string;
   role: string;
 }
-
-export interface findStaticMatePayload {
-  name?: string;
-  role?: string;
-}

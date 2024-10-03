@@ -12,7 +12,7 @@ Static_Mates_Router.get("/findSingleStaticMate", findSingleStaticMate);
 Static_Mates_Router.post("/createSingleStaticMate", createSingleStaticMate);
 
 //PUT METHODS:
-Static_Mates_Router.put("/:id/updateStaticMember", updateStaticMate);
+Static_Mates_Router.put("/updateStaticMember", updateStaticMate);
 
 //Delete METHODS:
 Static_Mates_Router.delete("/:id", deleteStaticMate);

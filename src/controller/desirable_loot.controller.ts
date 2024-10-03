@@ -1,35 +1,35 @@
-import pkg from "lodash";
+import pkg, { create } from "lodash";
 const { difference } = pkg;
-import { LootTable } from "../models/loot_table.model.js";
+import { DesirableLoot } from "../models/desirable_loot.model.js";
 import {
-  createPayload,
-  updateLootTablePayload,
-  LootTableServiceReturn,
-  findLootTablePayload,
-  deleteLootTablePayload,
-} from "./types/loot_table_types.js";
+  createDesirableLootPayload,
+  updateDesirableLootPayload,
+  DesirableLootServiceReturn,
+  findDesirableLootPayload,
+  deleteDesirableLootPayload,
+} from "./types/desirable_loot_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
 
 ///////Read or Pull all
 //need to add promises
-export const findAllLootTable = async (
+export const findAllDesirableLoot = async (
   req: Request,
   res: Response
-): Promise<LootTableServiceReturn> => {
+): Promise<DesirableLootServiceReturn> => {
   try {
-    const getAllLoot = req.query;
-    console.log("Calling find all for Loot on the Table");
-    const allLootTables: LootTable[] = await LootTable.findAll({
-      where: getAllLoot,
+    const getAllDesirableLoot = req.query;
+    console.log("Calling find all desirable loot");
+    const allDesirableLoot: DesirableLoot[] = await DesirableLoot.findAll({
+      where: getAllDesirableLoot,
       order: [["id", "asc"]],
     });
     res.status(200).json({
       status: "Sucesss",
-      data: allLootTables,
+      data: allDesirableLoot,
     });
     return {
       status: "Sucess",
-      data: allLootTables,
+      data: allDesirableLoot,
     };
   } catch (error) {
     console.error(error);
@@ -44,17 +44,16 @@ export const findAllLootTable = async (
   }
 };
 
-// Pull a SINGLE PERSON NEEDS TO BE FIXED
-export const findSingleLootTable = async (
-  req: Request<{ id: number }, {}, {}, createPayload>, //You should build scalability with queries in the future, this is good for now though
+export const findDesirableLootTable = async (
+  req: Request<{ id: number }, {}, {}, createDesirableLootPayload>, //You should build scalability with queries in the future, this is good for now though
   res: Response
-): Promise<LootTableServiceReturn> => {
-  const findSingleLoot = req.query;
+): Promise<DesirableLootServiceReturn> => {
+  const findSingleDesirableLoot = req.query;
   try {
     console.log("Calling find a single loot from loot_table");
     const { id }: { id: number } = req.params;
 
-    const findSingleLootTable: LootTable = await LootTable.findOne({
+    const findSingleDesirableLoot: DesirableLoot = await DesirableLoot.findOne({
       where: {
         id: id,
       },
@@ -62,12 +61,12 @@ export const findSingleLootTable = async (
 
     res.status(200).json({
       status: "Success",
-      data: findSingleLootTable,
+      data: findSingleDesirableLoot,
     });
 
     return {
       status: "Success",
-      data: findSingleLootTable,
+      data: findSingleDesirableLoot,
     };
   } catch (error) {
     console.error(error);
@@ -82,28 +81,26 @@ export const findSingleLootTable = async (
     };
   }
 };
-///create
 
-export const createSingleLootTable = async (
-  req: Request<{}, createPayload>,
+///create
+export const createSingleDesirableLoot = async (
+  req: Request<{}, createDesirableLootPayload>,
   res: Response
-): Promise<LootTableServiceReturn> => {
+): Promise<DesirableLootServiceReturn> => {
   try {
-    const createSingleLootTable: createPayload = req.body;
-    const default_fields: string[] = Object.keys(createSingleLootTable);
-    const REQUIRED_LOOT_TABLE_FIELDS: string[] = [
-      "piece_type",
-      "gear_source",
-      "name_of_gear",
-      "floor_id",
-      "iLvl",
+    const createSingleDesirableLoot: createDesirableLootPayload = req.body;
+    const default_fields: string[] = Object.keys(createSingleDesirableLoot);
+    const REQUIRED_DESIRABLE_LOOT_FIELDS: string[] = [
+      "static_mate_id",
+      "loot_table_id",
+      "date_obtained",
     ];
     const missingFields: string[] = difference(
-      REQUIRED_LOOT_TABLE_FIELDS,
+      REQUIRED_DESIRABLE_LOOT_FIELDS,
       default_fields
     );
     console.log(default_fields),
-      console.log(REQUIRED_LOOT_TABLE_FIELDS),
+      console.log(REQUIRED_DESIRABLE_LOOT_FIELDS),
       console.log(missingFields);
     if (missingFields.length !== 0) {
       res.status(400).json({
@@ -118,7 +115,7 @@ export const createSingleLootTable = async (
       };
     }
 
-    if (default_fields.length !== REQUIRED_LOOT_TABLE_FIELDS.length) {
+    if (default_fields.length !== REQUIRED_DESIRABLE_LOOT_FIELDS.length) {
       res.status(400).json({
         message: {
           status: "Error",
@@ -136,22 +133,20 @@ export const createSingleLootTable = async (
     console.log("req.body", req.body);
 
     //this is the set up of paramaters for postman
-    const single_loot_piece: LootTable = await LootTable.create({
-      piece_type: createSingleLootTable.piece_type,
-      name_of_gear: createSingleLootTable.name_of_gear,
-      floor_id: createSingleLootTable.floor_id,
-      gear_source: createSingleLootTable.gear_source,
-      iLvl: createSingleLootTable.iLvl,
+    const single_desirable_loot: DesirableLoot = await DesirableLoot.create({
+      static_mate_id: createSingleDesirableLoot.static_mate_id,
+      loot_table_id: createSingleDesirableLoot.loot_table_id,
+      date_obtained: createSingleDesirableLoot.date_obtained
     });
     //this is confirming that things worked
     res.status(200).json({
       status: "Sucesss",
-      data: single_loot_piece,
+      data: single_desirable_loot,
     });
 
     return {
       status: "Sucess",
-      data: single_loot_piece,
+      data: single_desirable_loot,
     };
   } catch (error) {
     console.error(error);
@@ -168,16 +163,16 @@ export const createSingleLootTable = async (
 };
 
 /////Update
-export const updateLootTable = async (
-  req: Request<{ id: number }, updateLootTablePayload>,
+export const updateDesirableLoot = async (
+  req: Request<{ id: number }, updateDesirableLootPayload>,
   res: Response
-): Promise<LootTableServiceReturn> => {
+): Promise<DesirableLootServiceReturn> => {
   try {
-    const updateLootTableInfo: updateLootTablePayload = req.body;
-    const Loot_Table_Keys: string[] = Object.keys(LootTable.getAttributes());
-    const getAllLootTable = req.body; //json object
-    for (const key in getAllLootTable) {
-      if (!Loot_Table_Keys.includes(key)) {
+    const updateDesirableLootInfo: updateDesirableLootPayload = req.body;
+    const Desirable_Loot_Keys: string[] = Object.keys(DesirableLoot.getAttributes());
+    const getAllDesirableLoot = req.body; //json object
+    for (const key in getAllDesirableLoot) {
+      if (!Desirable_Loot_Keys.includes(key)) {
         res.status(400).json({
           status: "Error",
           data: "Invalid Field: " + key,
@@ -192,10 +187,10 @@ export const updateLootTable = async (
     //do a find first to see if that thing exist
     //also ends things early
     const { id }: { id: number } = req.body;
-    console.log("req.body is reading:", updateLootTableInfo);
+    console.log("req.body is reading:", updateDesirableLootInfo);
 
-    const [affectedCount, affectedRows]: [number, LootTable[]] =
-      await LootTable.update(updateLootTableInfo, {
+    const [affectedCount, affectedRows]: [number, DesirableLoot[]] =
+      await DesirableLoot.update(updateDesirableLootInfo, {
         where: {
           id: id,
         },
@@ -226,13 +221,13 @@ export const updateLootTable = async (
 };
 
 ///////Delete
-export const deleteLootTable = async (
-  req: Request<{ id: number }, {}, {}, deleteLootTablePayload>,
+export const deleteDesirableLoot = async (
+  req: Request<{ id: number }, {}, {}, deleteDesirableLootPayload>,
   res: Response
-): Promise<LootTableServiceReturn> => {
+): Promise<DesirableLootServiceReturn> => {
   try {
     const { id }: { id: number } = req.params;
-    const delete_single_loot_piece: number = await LootTable.destroy({
+    const delete_single_desirable_loot: number = await DesirableLoot.destroy({
       where: {
         id: id,
       },
@@ -240,12 +235,12 @@ export const deleteLootTable = async (
 
     res.status(200).json({
       status: "Success",
-      data: delete_single_loot_piece,
+      data: delete_single_desirable_loot,
     });
 
     return {
       status: "Success",
-      data: delete_single_loot_piece,
+      data: delete_single_desirable_loot,
     };
   } catch (error) {
     console.error(error);
@@ -260,12 +255,6 @@ export const deleteLootTable = async (
   }
 };
 
-// return res.status(200).json({ message:
-//   {
-//       status: 'Sucesss',
-//       data: 'The following was created:' + single_loot_piece
-//   }
-
-//createSingleLootTable({params: {gear_piece: "bracelet", gear_name:"Light-heavyweight raid ", floor_level: "m1s", source_of_gear: "Raid", itemLvl:730}}, {});
-//updateLootTable({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {})
-//the second half is the response so you can chain controllers to each other the second object is also a res
+// //createSingleLootTable({params: {gear_piece: "bracelet", gear_name:"Light-heavyweight raid ", floor_level: "m1s", source_of_gear: "Raid", itemLvl:730}}, {});
+// //updateLootTable({query: {id: 4 ,static_name: "Higgs", raid_member_role: "Ranged DPS"}}, {})
+// //the second half is the response so you can chain controllers to each other the second object is also a res
