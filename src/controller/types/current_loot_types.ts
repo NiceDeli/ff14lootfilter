@@ -1,3 +1,4 @@
+import { WhereOptions } from "sequelize";
 import { CurrentLoot } from "../../models/current_loot.model";
 
 export interface createCurrentLootPayload {
