@@ -11,10 +11,10 @@ export interface CurrentLootServiceReturn {
   data: string | CurrentLoot | CurrentLoot[] | number;
 }
 
-export interface findCurrentLootPayload {
-    static_mate_id?: number;
-    loot_table_id?: number;
-    id?: number;
+export type findCurrentLootPayload = WhereOptions<CurrentLoot> & {
+    static_mate_id: number;
+    loot_table_id: number;
+    id: number;
 }
 
 export interface updateCurrentLootPayload {

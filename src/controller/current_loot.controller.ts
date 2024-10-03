@@ -21,7 +21,7 @@ export const getAllCurrentLoot = async (
     const getAllCurrentLoot: findCurrentLootPayload = req.query;
     console.log("Calling find all desirable loot");
     const allCurrentLoot: CurrentLoot[] = await CurrentLoot.findAll({
-      where: getAllCurrentLoot as WhereOptions<CurrentLoot>,
+      where: getAllCurrentLoot,
       order: [["id", "asc"]],
     });
     res.status(200).json({
