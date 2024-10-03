@@ -9,6 +9,7 @@ import {
   deleteCurrentLootPayload,
 } from "./types/current_loot_types.js";
 import { Request, Response } from "express"; // Make sure you are importing from express
+import { WhereOptions } from "sequelize";
 
 ///////Read or Pull all
 //need to add promises
@@ -20,7 +21,7 @@ export const getAllCurrentLoot = async (
     const getAllCurrentLoot: findCurrentLootPayload = req.query;
     console.log("Calling find all desirable loot");
     const allCurrentLoot: CurrentLoot[] = await CurrentLoot.findAll({
-      where: getAllCurrentLoot,
+      where: getAllCurrentLoot as WhereOptions<CurrentLoot>,
       order: [["id", "asc"]],
     });
     res.status(200).json({
