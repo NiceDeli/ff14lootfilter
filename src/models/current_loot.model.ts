@@ -14,7 +14,7 @@ export class CurrentLoot extends Model<CurrentLoot> {
   id: number;
 
   @AllowNull(false)
-  @Column(DataType.STRING)
+  @Column(DataType.INTEGER)
   static_mate_id: number;
 
   @AllowNull(false)

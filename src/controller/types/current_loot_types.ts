@@ -13,6 +13,7 @@ export interface CurrentLootServiceReturn {
 export interface findCurrentLootPayload {
     static_mate_id: number;
     loot_table_id: number;
+    id: number;
 }
 
 export interface updateCurrentLootPayload {

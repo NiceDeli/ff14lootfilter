@@ -13,11 +13,11 @@ import { Request, Response } from "express"; // Make sure you are importing from
 ///////Read or Pull all
 //need to add promises
 export const getAllCurrentLoot = async (
-  req: Request,
+  req: Request<{ id: number }, {}, {}, findCurrentLootPayload>,
   res: Response
 ): Promise<CurrentLootServiceReturn> => {
   try {
-    const getAllCurrentLoot = req.query;
+    const getAllCurrentLoot: findCurrentLootPayload = req.query;
     console.log("Calling find all desirable loot");
     const allCurrentLoot: CurrentLoot[] = await CurrentLoot.findAll({
       where: getAllCurrentLoot,
