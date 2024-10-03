@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('loot_table', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable("floor", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -20,27 +20,19 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
-      piece_type: {
+      floor_abbreviation: {
+        //here i need to add a foreign key with queryInterface.addConstraint
         type: Sequelize.STRING,
         allowNull: false,
       },
-      name_of_gear: {
+      floor_name: {
+        //here i need to add a foreign key with queryInterface.addConstraint
         type: Sequelize.STRING,
         allowNull: false,
       },
-      loot_type: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      floor: {
-        //will be renamed to floor number later
-        type: Sequelize.INTEGER,
-        allowNull: false
-      }
     });
   },
-
-  async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('loot_table');
-  }
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable("floor");
+  },
 };
