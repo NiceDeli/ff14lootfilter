@@ -71,7 +71,7 @@ export const findSingleLootTable = async (
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      status: "Faliure",
+      status: "Failure",
       data: "Error trying to find Loot" + error,
     });
 
