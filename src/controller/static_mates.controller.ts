@@ -1,6 +1,8 @@
 import pkg from "lodash";
 const { difference } = pkg;
 import { StaticMate } from "../models/static_mates.model.js";
+import { DesirableLoot } from "../models/desirable_loot.model.js";
+import { CurrentLoot } from "../models/current_loot.model.js";
 import {
   createStaticMatePayload,
   updateStaticMatePayload,

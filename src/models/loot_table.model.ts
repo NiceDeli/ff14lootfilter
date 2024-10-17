@@ -1,4 +1,14 @@
-import { AllowNull, AutoIncrement, Column, DataType, PrimaryKey, Table, Model, ForeignKey, BelongsTo } from "sequelize-typescript";
+import {
+  AllowNull,
+  AutoIncrement,
+  Column,
+  DataType,
+  PrimaryKey,
+  Table,
+  Model,
+  ForeignKey,
+  BelongsTo,
+} from "sequelize-typescript";
 import { Floor } from "./floor.model.js"; // Ensure this import exists
 
 @Table({
@@ -13,7 +23,22 @@ export class LootTable extends Model<LootTable> {
   id: number;
 
   @AllowNull(false)
-  @Column(DataType.ENUM("accessory_upgrade", "armor_upgrade", "bracelet", "chest", "earrings", "feet", "gloves", "head", "legs", "necklace", "ring", "offhand"))
+  @Column(
+    DataType.ENUM(
+      "accessory_upgrade",
+      "armor_upgrade",
+      "bracelet",
+      "chest",
+      "earrings",
+      "feet",
+      "gloves",
+      "head",
+      "legs",
+      "necklace",
+      "ring",
+      "offhand"
+    )
+  )
   piece_type: string;
 
   @AllowNull(false)
@@ -42,5 +67,5 @@ export class LootTable extends Model<LootTable> {
   updatedAt: Date;
 
   // @BelongsTo(() => import('./floor.model.js').then(m => m.Floor))  // Lazy loading the Floor model using import()
-  floor: Floor;  // Adjusted TypeScript type
+  floor: Floor; // Adjusted TypeScript type
 }
