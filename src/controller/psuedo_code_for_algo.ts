@@ -66,7 +66,17 @@ the date range
         })
 
         Figure out the minimum date range we do:
-        const minimum_date = startingRaidDate.add((7 * specificLoot.number_killed), 'day);
+        Because we haven't implemented kill history, this means that if we killed it once 
+            we assume the minimum date is the date of the starting Raid Date
+
+        const actualMultiplitative = specificLoot.number_killed == 1 ? null : specificLoot.number_killed - 1
+        
+        let minimum_date = startingRaidDate;
+        
+        if(actualMultiplitative) {
+          minimum_date = startingRaidDate.add((7 * actualMultiplitative), 'day);
+        }
+      
         retVal.push({
             desirable_loot_name: loot.loot_name, 
             minimum_date_range: `${minimum_date.format('YYYY-MM-DD')}-${minimum_date.add(6, 'day).format('YYYY-MM-DD')}`
