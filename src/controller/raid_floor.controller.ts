@@ -53,7 +53,7 @@ export const getFloor = async (
 ): Promise<FloorServiceReturn> => {
   try {
     console.log("Calling find a single floor from raid_floor");
-    const getSingleRaidFloor:findFloorPayload = req.query;
+    const getSingleRaidFloor: findFloorPayload = req.query;
     const { id }: { id: number } = req.params;
     const getSingleFloor: Floor = await Floor.findOne({
       where: {
@@ -253,4 +253,3 @@ export const deleteRaidFloor = async (
     };
   }
 };
-
